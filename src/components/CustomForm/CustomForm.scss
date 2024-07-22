@@ -1,0 +1,138 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$border-color: rgba(128, 128, 128, 0.378);
+$color-white: #f1f1f1f1;
+.createPageContainer {
+  font-family: "poppins", sans-serif;
+  padding-bottom: 2rem;
+  .createPageContents {
+    .top {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 30px;
+      color: $color-dark;
+      .backIcon {
+        margin-top: 4px;
+        font-size: 20px;
+        color: $color-dark;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .headerTitle {
+        font-size: 20px;
+        font-weight: 400;
+        color: $color-dark;
+      }
+    }
+    .bottom {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      form {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        .inputGroup {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          label {
+            font-weight: 600;
+            font-size: 15px;
+            color: $color-dark;
+          }
+          .tailText {
+            font-size: 13px;
+            color: lighten($color-dark, 20%);
+          }
+          .nepaliDatePicker {
+            outline: 0;
+            padding: 5px;
+            min-height: 25px;
+            width: 300px;
+            border: 1px solid $color-dark;
+          }
+          input[type="text"],
+          input[type="email"],
+          input[type="password"] {
+            outline: 0;
+            padding: 5px;
+            min-height: 25px;
+            width: 300px;
+            border: 1px solid $color-dark;
+          }
+          textarea {
+            outline: 0;
+            padding: 5px;
+            min-height: 100px;
+            width: 300px;
+            border: 1px solid $color-dark;
+            font-family: "poppins", sans-serif;
+          }
+          select {
+            outline: 0;
+            padding: 5px;
+            min-height: 35px;
+            width: 310px;
+            border: 1px solid $color-dark;
+          }
+          .fileInput {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            .uploadedImage {
+              height: 150px;
+              width: 200px;
+            }
+          }
+        }
+        .btn-group {
+          display: flex;
+          gap: 1rem;
+          width: 100%;
+          .create-btn {
+            border: 0;
+            outline: 0;
+            background-color: $primary-color;
+            color: lighten($color-white, 5%);
+            height: 40px;
+            font-size: 15px;
+            width: max-content;
+            padding: 10px 20px;
+            transition: 300ms all ease-in-out;
+            font-weight: 600;
+            &:hover {
+              cursor: pointer;
+              background-color: darken($primary-color, 5%);
+            }
+          }
+          .cancel-btn {
+            border: 0;
+            outline: 0;
+            color: $primary-color;
+            background-color: lighten($color-white, 5%);
+            border: 2px solid $primary-color;
+            height: 40px;
+            font-size: 15px;
+            width: max-content;
+            padding: 10px 20px;
+            transition: 300ms all ease-in-out;
+            font-weight: 600;
+            &:hover {
+              color: lighten($color-white, 5%);
+              cursor: pointer;
+              background-color: darken($primary-color, 5%);
+            }
+          }
+        }
+      }
+    }
+  }
+}

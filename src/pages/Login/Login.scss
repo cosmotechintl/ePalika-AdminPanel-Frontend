@@ -1,0 +1,204 @@
+//color variables
+$primary-color: #073a64;
+$white-color: #f1f1f1;
+$disabled-bgcolor: #51636b;
+$color-gray: #666666;
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #fefffe;
+  box-sizing: border-box;
+  .loginContents {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    .loginContentsLeft,
+    .loginContentsRight {
+      flex: 1;
+      height: 100%;
+    }
+    .loginContentsLeft {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: lighten($primary-color, 5%);
+      .loginImg {
+        height: 400px;
+      }
+    }
+    .loginContentsRight {
+      background: #f5f4f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      .logoContainer {
+        .companyLogo {
+          width: 100px;
+          height: 100px;
+        }
+      }
+      .headerContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        height: 70px;
+        .header {
+          font-size: 22px;
+          text-transform: uppercase;
+          text-align: center;
+          color: $primary-color;
+          font-weight: 600;
+        }
+        .desc {
+          font-size: 14px;
+          color: gray;
+          text-align: center;
+        }
+      }
+      .loginForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        .inputField {
+          border: 1px solid rgba(0, 0, 0, 0.695);
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 5px 10px;
+          height: 40px;
+          width: 330px;
+          border-radius: 5px;
+          .inputFieldIcon {
+            font-size: 20px;
+          }
+          .emailField,
+          .passwordField {
+            border: 0;
+            outline: 0;
+            font-size: 14px;
+            background: transparent;
+            width: 100%;
+            height: inherit;
+          }
+        }
+        .loginButton {
+          .submitButton {
+            background-color: $primary-color;
+            border: 0;
+            outline: 0;
+            border-radius: 10px;
+            width: 350px;
+            height: 40px;
+            color: $white-color;
+            font-size: 15px;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            &:hover {
+              cursor: pointer;
+              background-color: darken($primary-color, 5%);
+            }
+            &:disabled {
+              cursor: no-drop;
+              background-color: $disabled-bgcolor;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+//tablets
+@media (max-width: 768px) {
+  .loginContainer {
+    .loginContents {
+      .loginContentsLeft {
+        .loginImg {
+          height: 85vh;
+          width: 350px;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 720px) {
+  .loginContainer {
+    .loginContents {
+      .loginContentsRight {
+        .loginForm {
+          .inputField {
+            width: 270px;
+          }
+          .loginButton {
+            .submitButton {
+              width: 290px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 650px) {
+  .loginContainer {
+    .loginContents {
+      .loginContentsLeft {
+        display: none;
+      }
+    }
+  }
+}
+//mobilephones
+@media (max-width: 480px) {
+  .loginContainer {
+    .loginContents {
+      .loginContentsLeft {
+        display: none;
+      }
+      .loginContentsRight {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 5rem;
+        .loginForm {
+          gap: 1rem;
+          .inputField {
+            width: 280px;
+          }
+          .loginButton {
+            .submitButton {
+              width: 300px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 320px) {
+  .loginContainer {
+    .loginContents {
+      .loginContentsRight {
+        .loginForm {
+          .inputField {
+            width: 250px;
+          }
+          .loginButton {
+            .submitButton {
+              width: 270px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

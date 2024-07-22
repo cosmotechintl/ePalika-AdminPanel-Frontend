@@ -1,0 +1,126 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+$color-white: #f1f1f1f1;
+$color-red: #ef233c;
+$border-color: rgba(128, 128, 128, 0.378);
+.viewPageContainer {
+  display: flex;
+  justify-content: flex-start;
+  .viewPageContents {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    .top {
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .leftTitle {
+        display: flex;
+        gap: 20px;
+        font-size: 25px;
+        font-weight: 400;
+        color: $color-dark;
+        .icon {
+          margin-top: 5px;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .rightContents {
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        .eyeViewIcon,
+        .filterIcon {
+          margin-top: 5px;
+          font-size: 20px;
+          color: $color-dark;
+        }
+        .createButton {
+          .title {
+            font-weight: 600;
+            font-size: 12px;
+          }
+          .addIcon {
+            margin-top: 3px;
+            color: $color-white;
+            font-size: 18px;
+          }
+          display: flex;
+          flex-direction: row;
+          gap: 3px;
+          align-items: center;
+          justify-content: center;
+          background-color: $primary-color;
+          color: lighten($color-white, 10%);
+          height: 25px;
+          width: max-content;
+          padding: 5px 10px;
+          transition: 300ms all ease-in-out;
+          &:hover {
+            cursor: pointer;
+            background-color: darken($primary-color, 5%);
+          }
+        }
+      }
+    }
+    .bottom {
+      width: 100%;
+      .listTable {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        thead {
+          tr {
+            background-color: lighten($active-bg-color, 4%);
+          }
+          th {
+            color: $color-dark;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 15px 0px;
+            border-bottom: 1px solid $border-color;
+          }
+          th:first-child {
+            width: 8%;
+          }
+        }
+        tbody {
+          tr:nth-child(even) {
+            background-color: lighten($active-bg-color, 4%);
+          }
+          tr:nth-child(odd) {
+            background-color: $bg-color;
+          }
+
+          td {
+            color: $color-dark;
+            text-align: left;
+            font-size: 14px;
+            padding: 15px 10px;
+            border-bottom: 1px solid $border-color;
+          }
+          td:first-child {
+            width: 8%;
+            padding-left: 2%;
+            color: $color-dark;
+            font-size: 18px;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+}

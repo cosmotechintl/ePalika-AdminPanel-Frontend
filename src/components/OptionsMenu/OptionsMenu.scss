@@ -1,0 +1,45 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$border-color: rgba(128, 128, 128, 0.378);
+.optionsMenuContainer {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  margin-top: 10px; // Adjust this to add some space for the arrow
+  left: 0px;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -10px; // Position above the container
+    left: 25%; // Center it horizontally
+    transform: translateX(-50%);
+    border-width: 0 10px 10px 10px; // Widths for left, top, right, bottom
+    border-style: solid;
+    border-color: transparent transparent white transparent; // Only bottom border is colored
+  }
+  .optionsMenuContents {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100px;
+    justify-content: center;
+    padding: 10px 20px;
+
+    .menuListItem a {
+      text-decoration: none;
+      color: $color-dark;
+      font-size: 12px;
+      font-weight: 600;
+
+      &:hover {
+        color: $color-icon;
+      }
+    }
+  }
+}

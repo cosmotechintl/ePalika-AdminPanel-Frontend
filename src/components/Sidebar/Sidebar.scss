@@ -1,0 +1,23 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$border-color: rgba(128, 128, 128, 0.378);
+.sidebarContainer {
+  min-height: calc(100vh - 40px);
+  background-color: $bg-color;
+  box-sizing: border-box;
+  border-right: 1px solid $border-color;
+  .sidebarContents {
+    display: flex;
+    flex-direction: column;
+    .sidebarMenuContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.7rem;
+    }
+  }
+}
