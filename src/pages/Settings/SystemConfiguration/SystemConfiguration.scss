@@ -1,0 +1,35 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+$color-white: #f1f1f1f1;
+$color-red: #ef233c;
+$border-color: rgba(128, 128, 128, 0.378);
+.systemConfigurationContainer {
+  padding-bottom: 2rem;
+  .systemConfigurationContents {
+    .systemConfigurationHeader {
+      display: flex;
+      gap: 1.2rem;
+      font-size: 25px;
+      font-weight: 400;
+      color: $color-dark;
+      margin-bottom: 1rem;
+      .backIcon {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .systemConfigurationCard {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+  }
+}

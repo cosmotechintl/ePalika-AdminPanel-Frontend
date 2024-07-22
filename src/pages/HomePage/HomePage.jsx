@@ -15,6 +15,15 @@ import HealthPostList from "../HealthPost/HealthPostList/HealthPostList";
 import CreateHealthPost from "../HealthPost/CreateHealthPost/CreateHealthPost";
 import EventList from "../Event/EventList/EventList";
 import CreateEvent from "../Event/CreateEvent/CreateEvent";
+import Settings from "../Settings/Settings";
+import SystemConfiguration from "../Settings/SystemConfiguration/SystemConfiguration";
+import NewsCategoryList from "../Category/NewsCategory/NewsCategoryList/NewsCategoryList";
+import CreateNewsCategory from "../Category/NewsCategory/CreateNewsCategory/CreateNewsCategory";
+import EventCategoryList from "../Category/EventCategory/EventCategoryList/EventCategoryList";
+import CreateEventCategory from "../Category/EventCategory/CreateEventCategory/CreateEventCategory";
+import TourismAreaCategoryList from "../Category/TourismAreaCategory/TourismAreaCategoryList/TourismAreaCategoryList";
+import CreateTourismAreaCategory from "../Category/TourismAreaCategory/CreateTourismAreaCategory/CreateTourismAreaCategory";
+
 const Homepage = () => {
   return (
     <div className="homepageContainer">
@@ -48,6 +57,35 @@ const Homepage = () => {
               <Route path="healthPost/create" element={<CreateHealthPost />} />
               <Route path="event" element={<EventList />} />
               <Route path="event/create" element={<CreateEvent />} />
+              <Route path="settings" element={<Settings />} />
+              <Route
+                path="settings/systemConfiguration"
+                element={<SystemConfiguration />}
+              />
+              <Route
+                path="/settings/systemConfiguration/newsCategory"
+                element={<NewsCategoryList />}
+              />
+              <Route
+                path="/settings/systemConfiguration/newsCategory/create"
+                element={<CreateNewsCategory />}
+              />
+              <Route
+                path="/settings/systemConfiguration/eventCategory"
+                element={<EventCategoryList />}
+              />
+              <Route
+                path="/settings/systemConfiguration/eventCategory/create"
+                element={<CreateEventCategory />}
+              />
+              <Route
+                path="/settings/systemConfiguration/tourismAreaCategory"
+                element={<TourismAreaCategoryList />}
+              />
+              <Route
+                path="/settings/systemConfiguration/tourismAreaCategory/create"
+                element={<CreateTourismAreaCategory />}
+              />
             </Routes>
           </div>
         </div>
