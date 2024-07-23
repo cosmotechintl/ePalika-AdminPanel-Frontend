@@ -4,11 +4,30 @@ import "./EventList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { truncateContents } from "../../../utils/truncateContents";
+import Loader from "../../../components/Loader/Loader";
 const EventList = () => {
   const headers = ["Name", "Date", "Category", "Description"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
+    // const fetchEvent = async () => {
+    //   try {
+    //     const event = await adminRequest.post(`${BASE_URL}/event`, {
+    //       firstRow: 1,
+    //       pageSize: 3,
+    //     });
+    //     const fetchedRows = event.data.data.map((event) => [
+    //       event.name,
+    //       event.eventDate,
+    //       event.event_category.name,
+    //       event.description,
+    //     ]);
+    //     setRows(fetchedRows);
+    //   } catch (error) {
+    //     toast.error("Failed to fetch events");
+    //   }
+    // };
+    // fetchEvent();
     const mockData = [
       {
         name: "Kathmandu Cultural Festival",
@@ -79,8 +98,7 @@ const EventList = () => {
           getMenuItems={getMenuItems}
         />
       ) : (
-        // <Loader />
-        <p>Loading</p>
+        <Loader />
       )}
       <ToastContainer position="top-center" />
     </div>

@@ -3,7 +3,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdOutlineEmail, MdOutlinePassword } from "react-icons/md";
 import "./Login.scss";
-import thumbnail from "../../assets/ePalika__Login.png";
+import thumbnail from "../../assets/coatofarm.png";
+import logo from "../../assets/logo.png";
 const Login = () => {
   return (
     <div className="loginContainer">
@@ -14,7 +15,7 @@ const Login = () => {
           </div>
           <div className="loginContentsRight">
             <div className="logoContainer">
-              <img src="#" alt="logo" className="companyLogo" />
+              <img src={logo} alt="logo" className="companyLogo" />
             </div>
             <div className="headerContainer">
               <span className="header">Welcome Back!</span>

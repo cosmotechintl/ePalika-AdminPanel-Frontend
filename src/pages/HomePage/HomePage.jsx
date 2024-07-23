@@ -23,6 +23,7 @@ import EventCategoryList from "../Category/EventCategory/EventCategoryList/Event
 import CreateEventCategory from "../Category/EventCategory/CreateEventCategory/CreateEventCategory";
 import TourismAreaCategoryList from "../Category/TourismAreaCategory/TourismAreaCategoryList/TourismAreaCategoryList";
 import CreateTourismAreaCategory from "../Category/TourismAreaCategory/CreateTourismAreaCategory/CreateTourismAreaCategory";
+import EditNews from "../News/EditNews/EditNews";
 
 const Homepage = () => {
   return (
@@ -43,6 +44,7 @@ const Homepage = () => {
             <Routes>
               <Route path="news" element={<NewsList />} />
               <Route path="news/create" element={<CreateNews />} />
+              <Route path="news/edit/:identifier" element={<EditNews />} />
               <Route path="policeStation" element={<PoliceStationList />} />
               <Route
                 path="policeStation/create"

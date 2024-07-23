@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import "./CreateNews.scss";
+import "./EditNews.scss";
 import CustomForm from "../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
-const CreateNews = () => {
+import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader/Loader";
+const EditNews = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const activeURL = location.pathname.split("/")[3];
   const initialFormData = {
     title: "",
     contents: "",
@@ -14,10 +19,45 @@ const CreateNews = () => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [data, setData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newsCategory, setNewsCategory] = useState([]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleEditorChange = (value) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      contents: value,
+    }));
+  };
   useEffect(() => {
     let isMounted = true;
+    const fetchNews = async () => {
+      try {
+        const response = await adminRequest.post(`${BASE_URL}/news/detail`, {
+          identifier: `${activeURL}`,
+        });
+        setData(response.data);
+        setFormData({
+          title: response.data.heading,
+          contents: response.data.details,
+          category: response.data.category.name,
+          image: response.data.image,
+        });
+        console.log(response.data);
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch news at the moment");
+        }
+      }
+    };
     const fetchNewsCategory = async () => {
       try {
         const newsCategories = await adminRequest.post(
@@ -33,32 +73,26 @@ const CreateNews = () => {
         }
       }
     };
+    fetchNews();
     fetchNewsCategory();
     return () => {
       isMounted = false;
     };
-  }, []);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
+  }, [activeURL]);
 
-  const handleEditorChange = (value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      contents: value,
-    }));
-  };
+  updateAuthToken();
+
+  if (!data || !data.data) {
+    return <Loader />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    console.log(formData);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/news/create`, {
+        adminRequest.post(`${BASE_URL}/news/update/${activeURL}`, {
           heading: formData.title,
           newsCategory: {
             name: "formData.category",
@@ -67,7 +101,7 @@ const CreateNews = () => {
           image: formData.image,
         }),
         {
-          pending: "Posting News",
+          pending: "Updating News",
         }
       );
       if (response.data.code == 0) {
@@ -79,7 +113,7 @@ const CreateNews = () => {
       setFormData(initialFormData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create news");
+      toast.error("Failed to update news");
     } finally {
       setIsSubmitting(false);
     }
@@ -122,12 +156,12 @@ const CreateNews = () => {
   ];
 
   return (
-    <div className="createNewsContainer">
+    <div className="updateNewsContainer">
       <CustomForm
-        header="Create News"
+        header="Update News"
         fields={fields}
         flexDirection="row"
-        createButtonLabel="Post"
+        createButtonLabel="Update"
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
@@ -136,4 +170,4 @@ const CreateNews = () => {
   );
 };
 
-export default CreateNews;
+export default EditNews;

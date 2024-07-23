@@ -12,7 +12,7 @@ function App() {
       <Routes>
         {/* <Route path="/create-password/:id" element={<CreatePassword />} /> */}
         <Route path="/login" element={<Login />} />
-        <Route path="/admin/*">
+        <Route path="/*">
           <Route path="*" element={<Homepage />} />
         </Route>
       </Routes>

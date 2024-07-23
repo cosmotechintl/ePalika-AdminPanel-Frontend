@@ -1,0 +1,32 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+.loaderContainer {
+  .loaderContents {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 80vh;
+    width: 100%;
+    gap: 20px;
+    .loaderIcon {
+      border-radius: 50%;
+      background-color: $active-bg-color;
+      .loadingIcon {
+        padding: 5px;
+        height: 80px;
+        width: 80px;
+        color: $primary-color;
+      }
+    }
+    .loaderText {
+      color: $color-dark;
+      font-weight: 500;
+    }
+  }
+}
