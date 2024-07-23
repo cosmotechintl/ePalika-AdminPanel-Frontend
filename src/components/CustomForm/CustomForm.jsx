@@ -104,10 +104,9 @@ const CustomForm = ({
                   <JoditEditor
                     ref={editor}
                     config={config}
-                    name={field.name}
-                    id={field.name}
                     value={field.value}
-                    onChange={field.onChange}
+                    tabIndex={1}
+                    onBlur={(newContent) => field.onChange(newContent)}
                   />
                 ) : field.type === "nepali-date-picker" ? (
                   <NepaliDatePicker

@@ -3,32 +3,34 @@ import List from "../../../components/List/List";
 import "./NewsList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import Loader from "../../../components/Loader/Loader";
+import Loader from "../../../components/Loader/Loader";
 import { truncateContents } from "../../../utils/truncateContents";
+import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
+import { BASE_URL } from "../../../utils/config";
 const NewsList = () => {
   const headers = ["Title", "Content", "Category", "Author", "Published on"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    // const fetchData = async () => {
+    // const fetchNews = async () => {
     //   try {
-    //     const response = await adminRequest.post(`${BASE_URL}/adminUser`, {
+    //     const news = await adminRequest.post(`${BASE_URL}/news`, {
     //       firstRow: 1,
     //       pageSize: 3,
     //     });
-    //     const fetchedRows = response.data.data.records.map((user) => [
-    //       user.name,
-    //       user.email,
-    //       user.mobileNumber,
-    //       user.accessGroup.name,
-    //       user.status.name,
+    //     const fetchedRows = news.data.data.map((news) => [
+    //       news.heading,
+    //       news.details,
+    //       news.category,
+    //       news.author,
+    //       news.createdDate,
     //     ]);
     //     setRows(fetchedRows);
     //   } catch (error) {
-    //     toast.error(error.message || "Failed to fetch data");
+    //     toast.error("Failed to fetch news");
     //   }
     // };
-    // fetchData();
+    // fetchNews();
     const mockData = [
       {
         title: "Global Warming Impact Intensifies",
@@ -65,17 +67,15 @@ const NewsList = () => {
 
     setRows(fetchedRows);
   }, []);
-
-  //   updateAuthToken();
+  updateAuthToken();
 
   const getMenuItems = (row) => [
     { link: `view/${row[1]}`, text: "View" },
     { link: `edit/${row[1]}`, text: "Edit" },
     { link: `delete/${row[1]}`, text: "Delete" },
   ];
-
   return (
-    <div className="adminListContainer">
+    <div className="newsListContainer">
       {rows.length > 0 ? (
         <List
           title="News Lists"
@@ -88,8 +88,7 @@ const NewsList = () => {
           getMenuItems={getMenuItems}
         />
       ) : (
-        // <Loader />
-        <p>Loading</p>
+        <Loader />
       )}
       <ToastContainer position="top-center" />
     </div>

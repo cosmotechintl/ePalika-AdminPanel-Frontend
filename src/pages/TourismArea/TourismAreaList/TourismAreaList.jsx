@@ -4,11 +4,44 @@ import "./TourismAreaList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { truncateContents } from "../../../utils/truncateContents";
+import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
+import { BASE_URL } from "../../../utils/config";
 const TourismAreaList = () => {
   const headers = ["Name", "Category", "Description", "Latitude", "Longitude"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
+    // let isMounted = true;
+
+    // const fetchTourismAreas = async () => {
+    //   try {
+    //     const tourismAreas = await adminRequest.post(
+    //       `${BASE_URL}/tourismAreas`,
+    //       {
+    //         firstRow: 1,
+    //         pageSize: 3,
+    //       }
+    //     );
+    //     const fetchedRows = tourismAreas.data.data.map((t) => [
+    //       t.name,
+    //       t.tourismCategory.name,
+    //       t.details,
+    //       t.latitude,
+    //       t.longitude,
+    //     ]);
+    //     if (isMounted) {
+    //       setRows(fetchedRows);
+    //     }
+    //   } catch (error) {
+    //     if (isMounted) {
+    //       toast.error("Failed to fetch tourism areas");
+    //     }
+    //   }
+    // };
+    // fetchTourismAreas();
+    // return () => {
+    //   isMounted = false;
+    // };
     const mockData = [
       {
         name: "Swayambhunath Stupa",
@@ -63,7 +96,7 @@ const TourismAreaList = () => {
     setRows(fetchedRows);
   }, []);
 
-  //   updateAuthToken();
+  updateAuthToken();
 
   const getMenuItems = (row) => [
     { link: `view/${row[1]}`, text: "View" },

@@ -61,7 +61,8 @@ $color-white: #f1f1f1f1;
           }
           input[type="text"],
           input[type="email"],
-          input[type="password"] {
+          input[type="password"],
+          input[type="date"] {
             outline: 0;
             padding: 5px;
             min-height: 25px;
@@ -79,7 +80,7 @@ $color-white: #f1f1f1f1;
           select {
             outline: 0;
             padding: 5px;
-            min-height: 35px;
+            min-height: 37px;
             width: 310px;
             border: 1px solid $color-dark;
           }

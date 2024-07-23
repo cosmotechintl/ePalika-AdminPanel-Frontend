@@ -6,6 +6,7 @@ import { IoChevronDownSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import logo from "../../assets/logo.png";
 const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,10 +28,8 @@ const Navbar = () => {
   return (
     <div className="navbarContainer">
       <div className="logoContainer">
-        <div className="right">
-          <h1 className="header">
-            e<span>Palika</span>
-          </h1>
+        <div className="left">
+          <img src={logo} alt="" className="logoImg" />
         </div>
       </div>
       <div className="profileContainer" onClick={toggleMenu} ref={menuRef}>

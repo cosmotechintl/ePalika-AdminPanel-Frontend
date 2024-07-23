@@ -3,30 +3,45 @@ import List from "../../../components/List/List";
 import "./PoliceStationList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../../../components/Loader/Loader";
+import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
+import { BASE_URL } from "../../../utils/config";
 const PoliceStationList = () => {
   const headers = ["Name", "Address", "Contact Person", "Phone", "Ward"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    // const fetchData = async () => {
+    // let isMounted = true;
+
+    // const fetchPoliceStations = async () => {
     //   try {
-    //     const response = await adminRequest.post(`${BASE_URL}/adminUser`, {
-    //       firstRow: 1,
-    //       pageSize: 3,
-    //     });
-    //     const fetchedRows = response.data.data.records.map((user) => [
-    //       user.name,
-    //       user.email,
-    //       user.mobileNumber,
-    //       user.accessGroup.name,
-    //       user.status.name,
+    //     const policeStation = await adminRequest.post(
+    //       `${BASE_URL}/policeStation`,
+    //       {
+    //         firstRow: 1,
+    //         pageSize: 3,
+    //       }
+    //     );
+    //     const fetchedRows = policeStation.data.data.map((ps) => [
+    //       ps.name,
+    //       ps.address,
+    //       ps.contactPerson,
+    //       ps.phone,
+    //       ps.ward.wardNumber,
     //     ]);
-    //     setRows(fetchedRows);
+    //     if (isMounted) {
+    //       setRows(fetchedRows);
+    //     }
     //   } catch (error) {
-    //     toast.error(error.message || "Failed to fetch data");
+    //     if (isMounted) {
+    //       toast.error("Failed to fetch police stations");
+    //     }
     //   }
     // };
-    // fetchData();
+    // fetchPoliceStations();
+    // return () => {
+    //   isMounted = false;
+    // };
     const mockData = [
       {
         Name: "Kathmandu Metropolitan Police",
@@ -75,7 +90,7 @@ const PoliceStationList = () => {
     setRows(fetchedRows);
   }, []);
 
-  //   updateAuthToken();
+  updateAuthToken();
 
   const getMenuItems = (row) => [
     { link: `view/${row[1]}`, text: "View" },
@@ -97,8 +112,7 @@ const PoliceStationList = () => {
           getMenuItems={getMenuItems}
         />
       ) : (
-        // <Loader />
-        <p>Loading</p>
+        <Loader />
       )}
       <ToastContainer position="top-center" />
     </div>

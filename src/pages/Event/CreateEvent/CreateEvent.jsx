@@ -3,6 +3,8 @@ import "./CreateEvent.scss";
 import CustomForm from "../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
+import { BASE_URL } from "../../../utils/config";
 
 const CreateEvent = () => {
   const initialFormData = {
@@ -14,15 +16,71 @@ const CreateEvent = () => {
 
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [eventCategory, setEventCategory] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchEventCategory = async () => {
+      try {
+        const eventCategories = await adminRequest.post(
+          `${BASE_URL}/eventCategory/get`
+        );
+        if (isMounted) {
+          setEventCategory(eventCategories.data.data);
+          updateAuthToken();
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch event category at the moment");
+        }
+      }
+    };
+    fetchEventCategory();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleEditorChange = (value) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      description: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    console.log(formData);
+    try {
+      const response = await toast.promise(
+        adminRequest.post(`${BASE_URL}/event/create`, {
+          name: formData.name,
+          description: formData.description,
+          eventDate: formData.date,
+          event_category: {
+            name: "formData.category",
+          },
+        }),
+        {
+          pending: "Creating Event",
+        }
+      );
+      if (response.data.code == 0) {
+        toast.success(response.data.message);
+      }
+      if (response.data.code != 0) {
+        toast.error(response.data.message);
+      }
+      setFormData(initialFormData);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to create event");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const fields = [
@@ -30,42 +88,41 @@ const CreateEvent = () => {
       name: "name",
       label: "Event Name",
       type: "text",
-      //   value: formData.name,
-      //   onChange: handleChange,
+      value: formData.name,
+      onChange: handleChange,
     },
     {
       name: "category",
       label: "Category",
       type: "select",
-      //   value: formData.category || "",
-      //   onChange: handleChange,
+      value: formData.category || "",
+      onChange: handleChange,
       options: [
         { label: "Select Category", value: "" },
-        // ...accessGroups.map((group) => ({
-        //   label: group.name,
-        //   value: group.name,
-        // })),
+        ...eventCategory.map((c) => ({
+          label: c.name,
+          value: c.name,
+        })),
       ],
     },
     {
-      name: "Date",
+      name: "date",
       label: "Event Date",
-      type: "nepali-date-picker",
-      //   value: formData.date,
-      //   onChange: handleChange,
+      type: "date",
+      value: formData.date,
+      onChange: handleChange,
     },
-
     {
       name: "description",
       label: "Description",
       type: "rich-text-editor",
-      //   value: formData.description,
-      //   onChange: handleChange,
+      value: formData.description,
+      onChange: handleEditorChange,
     },
   ];
 
   return (
-    <div className="createEventPostContainer">
+    <div className="createEventContainer">
       <CustomForm
         header="Create Event"
         fields={fields}

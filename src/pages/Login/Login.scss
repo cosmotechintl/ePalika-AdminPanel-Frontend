@@ -1,5 +1,5 @@
 //color variables
-$primary-color: #073a64;
+$primary-color: #00425a;
 $white-color: #f1f1f1;
 $disabled-bgcolor: #51636b;
 $color-gray: #666666;
@@ -40,9 +40,10 @@ $color-gray: #666666;
       align-items: center;
       flex-direction: column;
       .logoContainer {
+        margin-bottom: 1rem;
         .companyLogo {
-          width: 100px;
-          height: 100px;
+          height: 40px;
+          width: 220px;
         }
       }
       .headerContainer {
