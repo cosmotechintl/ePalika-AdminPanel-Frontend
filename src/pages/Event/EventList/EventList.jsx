@@ -5,78 +5,35 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { truncateContents } from "../../../utils/truncateContents";
 import Loader from "../../../components/Loader/Loader";
+import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
+import { BASE_URL } from "../../../utils/config";
+import { trimDate } from "../../../utils/dateUtil";
 const EventList = () => {
   const headers = ["Name", "Date", "Category", "Description"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    // const fetchEvent = async () => {
-    //   try {
-    //     const event = await adminRequest.post(`${BASE_URL}/event`, {
-    //       firstRow: 1,
-    //       pageSize: 3,
-    //     });
-    //     const fetchedRows = event.data.data.map((event) => [
-    //       event.name,
-    //       event.eventDate,
-    //       event.event_category.name,
-    //       event.description,
-    //     ]);
-    //     setRows(fetchedRows);
-    //   } catch (error) {
-    //     toast.error("Failed to fetch events");
-    //   }
-    // };
-    // fetchEvent();
-    const mockData = [
-      {
-        name: "Kathmandu Cultural Festival",
-        date: "2024-08-15",
-        category: "Festival",
-        description:
-          "A vibrant celebration of Nepali culture with traditional music, dance, and food, held in Kathmandu.",
-      },
-      {
-        name: "Pokhara Mountain Marathon",
-        date: "2024-09-05",
-        category: "Sports",
-        description:
-          "An exciting marathon event through the scenic trails of Pokhara, attracting runners from all over the world.",
-      },
-      {
-        name: "Bhaktapur Artisan Fair",
-        date: "2024-10-10",
-        category: "Market",
-        description:
-          "A market showcasing traditional Nepali crafts, handmade goods, and local art, taking place in Bhaktapur.",
-      },
-      {
-        name: "Everest Base Camp Trek Briefing",
-        date: "2024-07-20",
-        category: "Adventure",
-        description:
-          "An informative session for trekkers planning to embark on the Everest Base Camp trek, covering safety, preparation, and tips.",
-      },
-      {
-        name: "Nepal Food Expo",
-        date: "2024-11-01",
-        category: "Expo",
-        description:
-          "A culinary event featuring a variety of Nepali and international cuisines, cooking demonstrations, and food tastings.",
-      },
-    ];
-
-    const fetchedRows = mockData.map((event) => [
-      event.name,
-      event.date,
-      event.category,
-      truncateContents(event.description, 10),
-    ]);
-
-    setRows(fetchedRows);
+    const fetchEvent = async () => {
+      try {
+        const event = await adminRequest.post(`${BASE_URL}/event/get`, {
+          firstRow: 0,
+          pageSize: 0,
+        });
+        const fetchedRows = event?.data.data.records.map((event) => [
+          event.name,
+          trimDate(event.eventDate),
+          event.event_category.name,
+          truncateContents(event.description, 10),
+        ]);
+        setRows(fetchedRows);
+      } catch (error) {
+        toast.error("Failed to fetch events");
+      }
+    };
+    fetchEvent();
   }, []);
 
-  //   updateAuthToken();
+  updateAuthToken();
 
   const getMenuItems = (row) => [
     { link: `view/${row[1]}`, text: "View" },

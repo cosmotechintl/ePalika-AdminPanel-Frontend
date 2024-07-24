@@ -1,11 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { loginAdmin } from "../../services/loginService";
+import { performLogin } from "../../auth";
 import { MdOutlineEmail, MdOutlinePassword } from "react-icons/md";
 import "./Login.scss";
 import thumbnail from "../../assets/coatofarm.png";
 import logo from "../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
+  const [loginDetail, setLoginDetail] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (event, field) => {
+    const changedValue = event.target.value;
+    setLoginDetail({
+      ...loginDetail,
+      [field]: changedValue,
+    });
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await toast.promise(loginAdmin(loginDetail), {
+        pending: "Logging in...",
+        success: {
+          render({ data }) {
+            if (data.code == 0) {
+              performLogin(data, () => {
+                // Redirect to dashboard
+                navigate("/");
+              });
+              return data.message;
+            } else {
+              throw new Error(data.message);
+            }
+          },
+        },
+        error: {
+          render({ data }) {
+            return data.message || "An error occurred";
+          },
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("An unexpected error occurred");
+    }
+  };
+
+  const isFormValid = loginDetail.username && loginDetail.password;
+
   return (
     <div className="loginContainer">
       <div className="loginContainer">
@@ -30,8 +79,8 @@ const Login = () => {
                   id="email"
                   placeholder="Enter your username"
                   className="emailField"
-                  // value={loginDetail.username}
-                  // onChange={(e) => handleChange(e, "username")}
+                  value={loginDetail.username}
+                  onChange={(e) => handleChange(e, "username")}
                 />
               </div>
               <div className="inputField">
@@ -42,16 +91,16 @@ const Login = () => {
                   id="password"
                   placeholder="Enter your password"
                   className="passwordField"
-                  // value={loginDetail.password}
-                  // onChange={(e) => handleChange(e, "password")}
+                  value={loginDetail.password}
+                  onChange={(e) => handleChange(e, "password")}
                 />
               </div>
               <div className="loginButton">
                 <button
                   type="submit"
                   className="submitButton"
-                  // onClick={handleFormSubmit}
-                  // disabled={!isFormValid}
+                  onClick={handleFormSubmit}
+                  disabled={!isFormValid}
                 >
                   Login
                 </button>

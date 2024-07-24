@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import List from "../../../../components/List/List";
-import "./NewsCategoryList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../../utils/requestMethod";
 import { BASE_URL } from "../../../../utils/config";
 import Loader from "../../../../components/Loader/Loader";
 
-const NewsCategoryList = () => {
+const HealthServiceCategoryList = () => {
   const headers = ["Name", "Description"];
   const [rows, setRows] = useState([]);
 
@@ -16,11 +15,11 @@ const NewsCategoryList = () => {
     const fetchNewsCategories = async () => {
       try {
         const categories = await adminRequest.get(
-          `${BASE_URL}/newsCategory/get`
+          `${BASE_URL}/healthCategory/get`
         );
-        const fetchedRows = categories?.data.data.map((news) => [
-          news.name,
-          news.description,
+        const fetchedRows = categories?.data.data.map((c) => [
+          c.name,
+          c.description,
         ]);
         if (isMounted) {
           toast.success(categories?.data.message);
@@ -28,7 +27,7 @@ const NewsCategoryList = () => {
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch news categories");
+          toast.error("Failed to fetch health service categories");
         }
       }
     };
@@ -47,11 +46,11 @@ const NewsCategoryList = () => {
   ];
 
   return (
-    <div className="newsCategoryListContainer">
+    <div className="healthServiceCategoryListContainer">
       {rows.length > 0 ? (
         <List
-          title="News Category Lists"
-          createButtonLabel="Create News Category"
+          title="Health Service Category Lists"
+          createButtonLabel="Create Health Category"
           headers={headers}
           rows={rows}
           link="create"
@@ -67,4 +66,4 @@ const NewsCategoryList = () => {
   );
 };
 
-export default NewsCategoryList;
+export default HealthServiceCategoryList;

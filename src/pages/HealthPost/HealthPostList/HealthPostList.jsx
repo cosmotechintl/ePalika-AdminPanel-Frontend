@@ -7,95 +7,42 @@ import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
 import Loader from "../../../components/Loader/Loader";
 const HealthPostList = () => {
-  const headers = ["Name", "Address", "Phone", "Bed Count", "Ward", "Type"];
+  const headers = ["Name", "Address", "Phone", "Bed Count", "Type", "Ward"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    // let isMounted = true;
+    let isMounted = true;
 
-    // const fetchHealthServices = async () => {
-    //   try {
-    //     const healthService = await adminRequest.post(
-    //       `${BASE_URL}/healthServices`,
-    //       {
-    //         firstRow: 1,
-    //         pageSize: 3,
-    //       }
-    //     );
-    //     const fetchedRows = healthService.data.data.map((hs) => [
-    //       hs.name,
-    //       hs.address,
-    //       hs.phone,
-    //       hs.bedCount,
-    //       hs.ward.wardNumber,
-    //       hs.healthType.healthType,
-    //     ]);
-    //     if (isMounted) {
-    //       setRows(fetchedRows);
-    //     }
-    //   } catch (error) {
-    //     if (isMounted) {
-    //       toast.error("Failed to fetch health services");
-    //     }
-    //   }
-    // };
-    // fetchHealthServices();
-    // return () => {
-    //   isMounted = false;
-    // };
-    const mockData = [
-      {
-        name: "Sundar Health Post",
-        address: "Sundar Municipality, Kathmandu, Nepal",
-        phone: "+977 1 1122334",
-        bedCount: 10,
-        ward: "Sundar",
-        type: "Primary Health Care",
-      },
-      {
-        name: "Patan Health Center",
-        address: "Patan, Lalitpur, Nepal",
-        phone: "+977 1 2233445",
-        bedCount: 20,
-        ward: "Patan",
-        type: "General Health",
-      },
-      {
-        name: "Pokhara Community Health Post",
-        address: "Pokhara, Kaski, Nepal",
-        phone: "+977 61 334455",
-        bedCount: 15,
-        ward: "Pokhara",
-        type: "Community Health",
-      },
-      {
-        name: "Biratnagar Health Clinic",
-        address: "Biratnagar, Morang, Nepal",
-        phone: "+977 21 445566",
-        bedCount: 8,
-        ward: "Biratnagar",
-        type: "Basic Health Service",
-      },
-      {
-        name: "Bhaktapur Health Post",
-        address: "Bhaktapur, Nepal",
-        phone: "+977 1 5566778",
-        bedCount: 12,
-        ward: "Bhaktapur",
-        type: "Primary Health Care",
-      },
-    ];
-
-    const fetchedRows = mockData.map((hP) => [
-      hP.name,
-      hP.address,
-      hP.phone,
-      hP.bedCount,
-      hP.ward,
-      hP.type,
-    ]);
-
-    setRows(fetchedRows);
+    const fetchHealthServices = async () => {
+      try {
+        const healthService = await adminRequest.post(
+          `${BASE_URL}/healthService/get`,
+          {
+            firstRow: 1,
+            pageSize: 3,
+          }
+        );
+        const fetchedRows = healthService.data.data.records.map((hs) => [
+          hs.name,
+          hs.address,
+          hs.phone,
+          hs.bedCount,
+          hs.healthCategory.name,
+          hs.ward.wardNumber,
+        ]);
+        if (isMounted) {
+          setRows(fetchedRows);
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch health services");
+        }
+      }
+    };
+    fetchHealthServices();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   updateAuthToken();

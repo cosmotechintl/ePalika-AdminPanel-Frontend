@@ -20,10 +20,11 @@ const CreateNews = () => {
     let isMounted = true;
     const fetchNewsCategory = async () => {
       try {
-        const newsCategories = await adminRequest.post(
+        const newsCategories = await adminRequest.get(
           `${BASE_URL}/newsCategory/get`
         );
         if (isMounted) {
+          toast.success(newsCategories.data.message);
           setNewsCategory(newsCategories.data.data);
           updateAuthToken();
         }
@@ -61,10 +62,11 @@ const CreateNews = () => {
         adminRequest.post(`${BASE_URL}/news/create`, {
           heading: formData.title,
           newsCategory: {
-            name: "formData.category",
+            name: formData.category,
           },
           details: formData.contents,
-          image: formData.image,
+          // image: formData.image,
+          image: "image.jpg",
         }),
         {
           pending: "Posting News",
@@ -105,8 +107,6 @@ const CreateNews = () => {
       onChange: handleChange,
       options: [
         { label: "Select News Category", value: "" },
-        { label: "Education", value: "education" },
-        { label: "Politics", value: "politics" },
         ...newsCategory.map((c) => ({
           label: c.name,
           value: c.name,

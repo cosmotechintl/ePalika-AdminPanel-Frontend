@@ -1,0 +1,45 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+.sidebarMenu {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px;
+  transition: 300ms all ease-in-out;
+  &.active {
+    background-color: $active-bg-color;
+    border-right: 2px solid $color-icon;
+    .sidebarIcon,
+    .title {
+      color: $color-icon;
+    }
+  }
+  .menuContent {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: darken($color-dark, 10%);
+    transition: 300ms all ease-in-out;
+    .sidebarIcon {
+      font-size: 20px;
+      margin-bottom: -10px;
+    }
+    .title {
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+    }
+    &:hover {
+      color: darken($color-icon, 5%);
+      cursor: pointer;
+    }
+  }
+}

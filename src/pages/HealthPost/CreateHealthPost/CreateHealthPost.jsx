@@ -16,7 +16,7 @@ const CreateHealthPost = () => {
     services: "",
     ward: "",
     bedCount: "",
-    healthType: "",
+    category: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -34,21 +34,22 @@ const CreateHealthPost = () => {
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch wards at the moment");
+          // toast.error("Failed to fetch wards at the moment");
         }
       }
     };
     const fetchHealthType = async () => {
       try {
-        const healthType = await adminRequest.post(
-          `${BASE_URL}/healthType/get`
+        const healthType = await adminRequest.get(
+          `${BASE_URL}/healthCategory/get`
         );
         if (isMounted) {
+          toast.success(healthType.data.message);
           setHealthType(healthType.data.data);
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch health type at the moment");
+          toast.error("Failed to fetch health category at the moment");
         }
       }
     };
@@ -68,7 +69,7 @@ const CreateHealthPost = () => {
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/healthServices/create`, {
+        adminRequest.post(`${BASE_URL}/healthService/create`, {
           name: formData.name,
           address: formData.address,
           phone: formData.phone,
@@ -76,11 +77,11 @@ const CreateHealthPost = () => {
           contactPerson: formData.contactPerson,
           services: formData.services,
           ward: {
-            wardNumber: "formData.ward",
+            wardNumber: 1,
           },
           bedCount: formData.bedCount,
-          healthType: {
-            healthType: "formData.healthType",
+          healthCategory: {
+            name: test,
           },
         }),
         {
@@ -121,7 +122,7 @@ const CreateHealthPost = () => {
       name: "phone",
       label: "Phone Number",
       type: "text",
-      value: formData.name,
+      value: formData.phone,
       onChange: handleChange,
     },
     {
@@ -161,12 +162,12 @@ const CreateHealthPost = () => {
     },
     {
       name: "type",
-      label: "Health Type",
+      label: "Health Category",
       type: "select",
-      value: formData.type || "",
+      value: formData.category || "",
       onChange: handleChange,
       options: [
-        { label: "Select Health Type", value: "" },
+        { label: "Select Health Category", value: "" },
         ...healthType.map((ht) => ({
           label: ht.name,
           value: ht.name,

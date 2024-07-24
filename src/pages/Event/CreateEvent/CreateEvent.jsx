@@ -44,12 +44,6 @@ const CreateEvent = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleEditorChange = (value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      description: value,
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +55,7 @@ const CreateEvent = () => {
           description: formData.description,
           eventDate: formData.date,
           event_category: {
-            name: "formData.category",
+            name: "Music Concert",
           },
         }),
         {
@@ -115,9 +109,9 @@ const CreateEvent = () => {
     {
       name: "description",
       label: "Description",
-      type: "rich-text-editor",
+      type: "textarea",
       value: formData.description,
-      onChange: handleEditorChange,
+      onChange: handleChange,
     },
   ];
 

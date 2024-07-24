@@ -24,6 +24,8 @@ import CreateEventCategory from "../Category/EventCategory/CreateEventCategory/C
 import TourismAreaCategoryList from "../Category/TourismAreaCategory/TourismAreaCategoryList/TourismAreaCategoryList";
 import CreateTourismAreaCategory from "../Category/TourismAreaCategory/CreateTourismAreaCategory/CreateTourismAreaCategory";
 import EditNews from "../News/EditNews/EditNews";
+import HealthServiceCategoryList from "../Category/HealthServiceCategory/HealthServiceCategoryList/HealthServiceCategoryList";
+import CreateHealthServiceCategory from "../Category/HealthServiceCategory/CreateHealthServiceCategory/CreateHealthServiceCategory";
 
 const Homepage = () => {
   return (
@@ -55,38 +57,49 @@ const Homepage = () => {
                 path="tourismArea/create"
                 element={<CreateTourismArea />}
               />
-              <Route path="healthPost" element={<HealthPostList />} />
-              <Route path="healthPost/create" element={<CreateHealthPost />} />
+              <Route path="healthService" element={<HealthPostList />} />
+              <Route
+                path="healthService/create"
+                element={<CreateHealthPost />}
+              />
               <Route path="event" element={<EventList />} />
               <Route path="event/create" element={<CreateEvent />} />
-              <Route path="settings" element={<Settings />} />
+              <Route path="setting" element={<Settings />} />
               <Route
-                path="settings/systemConfiguration"
+                path="setting/systemConfiguration"
                 element={<SystemConfiguration />}
               />
               <Route
-                path="/settings/systemConfiguration/newsCategory"
+                path="/setting/systemConfiguration/newsCategory"
                 element={<NewsCategoryList />}
               />
               <Route
-                path="/settings/systemConfiguration/newsCategory/create"
+                path="/setting/systemConfiguration/newsCategory/create"
                 element={<CreateNewsCategory />}
               />
               <Route
-                path="/settings/systemConfiguration/eventCategory"
+                path="/setting/systemConfiguration/eventCategory"
                 element={<EventCategoryList />}
               />
               <Route
-                path="/settings/systemConfiguration/eventCategory/create"
+                path="/setting/systemConfiguration/eventCategory/create"
                 element={<CreateEventCategory />}
               />
               <Route
-                path="/settings/systemConfiguration/tourismAreaCategory"
+                path="/setting/systemConfiguration/tourismAreaCategory"
                 element={<TourismAreaCategoryList />}
               />
               <Route
-                path="/settings/systemConfiguration/tourismAreaCategory/create"
+                path="/setting/systemConfiguration/tourismAreaCategory/create"
                 element={<CreateTourismAreaCategory />}
+              />
+              <Route
+                path="/setting/systemConfiguration/healthServiceCategory"
+                element={<HealthServiceCategoryList />}
+              />
+              <Route
+                path="/setting/systemConfiguration/healthServiceCategory/create"
+                element={<CreateHealthServiceCategory />}
               />
             </Routes>
           </div>

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import "./CreateNewsCategory.scss";
+import React, { useState } from "react";
 import CustomForm from "../../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BASE_URL } from "../../../../utils/config";
 import { adminRequest } from "../../../../utils/requestMethod";
 
-const CreateNewsCategory = () => {
+const CreateHealthServiceCategory = () => {
   const initialFormData = {
     name: "",
     description: "",
@@ -24,12 +23,12 @@ const CreateNewsCategory = () => {
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/newsCategory/create`, {
+        adminRequest.post(`${BASE_URL}/healthCategory/create`, {
           name: formData.name,
           description: formData.description,
         }),
         {
-          pending: "Creating news category",
+          pending: "Creating health service category",
         }
       );
       if (response.data.code == 0) {
@@ -65,9 +64,9 @@ const CreateNewsCategory = () => {
   ];
 
   return (
-    <div className="createNewsCategoryContainer">
+    <div className="createHealthServiceCategoryContainer">
       <CustomForm
-        header="Create News Category"
+        header="Create Health Service Category"
         fields={fields}
         flexDirection="column"
         createButtonLabel="Create"
@@ -79,4 +78,4 @@ const CreateNewsCategory = () => {
   );
 };
 
-export default CreateNewsCategory;
+export default CreateHealthServiceCategory;
