@@ -22,7 +22,6 @@ const HealthServiceCategoryList = () => {
           c.description,
         ]);
         if (isMounted) {
-          toast.success(categories?.data.message);
           setRows(fetchedRows);
         }
       } catch (error) {

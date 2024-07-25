@@ -3,73 +3,39 @@ import List from "../../../../components/List/List";
 import "./TourismAreaCategoryList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { adminRequest, updateAuthToken } from "../../../../utils/requestMethod";
+import { BASE_URL } from "../../../../utils/config";
 const TourismAreaCategoryList = () => {
   const headers = ["Name", "Description"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    const mockData = [
-      {
-        name: "Historic Sites",
-        description:
-          "Landmarks and locations of historical significance, including ancient ruins, monuments, and cultural heritage sites.",
-      },
-      {
-        name: "Natural Attractions",
-        description:
-          "Scenic landscapes, natural parks, mountains, lakes, and other natural wonders perfect for outdoor exploration and adventure.",
-      },
-      {
-        name: "Museums & Galleries",
-        description:
-          "Institutions that preserve and display artifacts, artworks, and exhibits related to various fields such as history, art, and science.",
-      },
-      {
-        name: "Adventure Activities",
-        description:
-          "Thrilling activities like trekking, rock climbing, paragliding, and other adrenaline-pumping experiences.",
-      },
-      {
-        name: "Beaches & Coastal Areas",
-        description:
-          "Beautiful beaches, coastal regions, and seaside resorts ideal for relaxation, water sports, and enjoying the ocean.",
-      },
-      {
-        name: "Wildlife Sanctuaries",
-        description:
-          "Protected areas for observing wildlife in their natural habitat, including national parks and conservation reserves.",
-      },
-      {
-        name: "Religious Sites",
-        description:
-          "Temples, monasteries, churches, and other places of worship significant to various religious traditions.",
-      },
-      {
-        name: "Urban Attractions",
-        description:
-          "Popular city destinations such as iconic buildings, markets, entertainment districts, and urban parks.",
-      },
-      {
-        name: "Cultural Villages",
-        description:
-          "Villages and communities that offer a glimpse into traditional lifestyles, crafts, and local customs.",
-      },
-      {
-        name: "Resorts & Retreats",
-        description:
-          "Luxury resorts, wellness retreats, and spa destinations designed for relaxation and rejuvenation.",
-      },
-    ];
-
-    const fetchedRows = mockData.map((eventCategory) => [
-      eventCategory.name,
-      eventCategory.description,
-    ]);
-
-    setRows(fetchedRows);
+    let isMounted = true;
+    const fetchCategories = async () => {
+      try {
+        const categories = await adminRequest.get(
+          `${BASE_URL}/tourismCategory`
+        );
+        const fetchedRows = categories?.data.data.map((c) => [
+          c.name,
+          c.description,
+        ]);
+        if (isMounted) {
+          setRows(fetchedRows);
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch tourism area categories");
+        }
+      }
+    };
+    fetchCategories();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  //   updateAuthToken();
+  updateAuthToken();
 
   const getMenuItems = (row) => [
     { link: `view/${row[1]}`, text: "View" },

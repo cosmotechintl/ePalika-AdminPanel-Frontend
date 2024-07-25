@@ -1,7 +1,7 @@
 import React from "react";
 import "./SystemConfiguration.scss";
 import Card from "../../../components/Card/Card";
-import { BiCategory } from "react-icons/bi";
+import { BiSolidInstitution } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { FaRegNewspaper } from "react-icons/fa";
@@ -36,8 +36,11 @@ const SystemConfiguration = () => {
           <Link to="healthServiceCategory" style={{ textDecoration: "none" }}>
             <Card icon={<BiHealth />} title="Health Service Category" />
           </Link>
-          <Link to="educationCategory" style={{ textDecoration: "none" }}>
-            <Card icon={<IoSchoolSharp />} title="Education Category" />
+          <Link to="educationLevel" style={{ textDecoration: "none" }}>
+            <Card icon={<IoSchoolSharp />} title="Education Level" />
+          </Link>
+          <Link to="educationOwnership" style={{ textDecoration: "none" }}>
+            <Card icon={<BiSolidInstitution />} title="Education Ownership" />
           </Link>
         </div>
       </div>

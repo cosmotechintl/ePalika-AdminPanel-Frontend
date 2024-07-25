@@ -2,13 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Navbar.scss";
 import Menu from "../Menu/Menu";
 import { IoChevronDownSharp } from "react-icons/io5";
-// import useFetch from "../../hooks/useFetch";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import useFetch from "../../hooks/useFetch";
 import logo from "../../assets/logo.png";
+import { BASE_URL } from "../../utils/config";
+import { adminRequest, updateAuthToken } from "../../utils/requestMethod";
 const Navbar = () => {
-  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef();
   const toggleMenu = () => {
@@ -19,12 +17,14 @@ const Navbar = () => {
       setIsMenuOpen(false);
     }
   };
-  //   useEffect(() => {
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //     return () => {
-  //       document.removeEventListener("mousedown", handleClickOutside);
-  //     };
-  //   }, []);
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  const { data } = useFetch(`${BASE_URL}/admin/viewProfile`, adminRequest);
+  updateAuthToken();
   return (
     <div className="navbarContainer">
       <div className="logoContainer">
@@ -40,8 +40,7 @@ const Navbar = () => {
             className="profileImg"
           />
           <span className="profileName">
-            {/* Namaste, {data && data.data ? data.data.username : ""} */}
-            Namaste,
+            Namaste, {data && data.data ? data.data.username : ""}
           </span>
           <span className="chevron">
             <IoChevronDownSharp />

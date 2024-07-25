@@ -49,7 +49,7 @@ const Login = () => {
       });
     } catch (error) {
       console.error(error);
-      toast.error("An unexpected error occurred");
+      toast.error("Username or password doesnot match");
     }
   };
 

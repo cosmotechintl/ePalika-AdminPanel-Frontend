@@ -26,6 +26,16 @@ import CreateTourismAreaCategory from "../Category/TourismAreaCategory/CreateTou
 import EditNews from "../News/EditNews/EditNews";
 import HealthServiceCategoryList from "../Category/HealthServiceCategory/HealthServiceCategoryList/HealthServiceCategoryList";
 import CreateHealthServiceCategory from "../Category/HealthServiceCategory/CreateHealthServiceCategory/CreateHealthServiceCategory";
+import AdminList from "../Admin/AdminList/AdminList";
+import AdminDetails from "../Admin/AdminDetails/AdminDetails";
+import EducationLevelList from "../Category/Education/EducationLevel/EducationLevelList";
+import CreateEducationLevel from "../Category/Education/EducationLevel/CreateEducationLevel";
+import EducationOwnershipList from "../Category/Education/EducationOwnership/EducationOwnershipList";
+import CreateEducationOwnership from "../Category/Education/EducationOwnership/CreateEducationOwnership";
+import EducationList from "../Education/EducationList/EducationList";
+import CreateEducation from "../Education/CreateEducation/CreateEducation";
+import UserProfile from "../UserProfile/UserProfile";
+import ChangePassword from "../ChangePassword/ChangePassword";
 
 const Homepage = () => {
   return (
@@ -44,17 +54,18 @@ const Homepage = () => {
           </div>
           <div className="homepageContents__right">
             <Routes>
+              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/changePassword" element={<ChangePassword />} />
+              <Route path="adminUser" element={<AdminList />} />
+              <Route path="/adminUser/view/:email" element={<AdminDetails />} />
               <Route path="news" element={<NewsList />} />
               <Route path="news/create" element={<CreateNews />} />
-              <Route path="news/edit/:identifier" element={<EditNews />} />
-              <Route path="policeStation" element={<PoliceStationList />} />
+              <Route path="news/view/:code" element={<EditNews />} />
+              <Route path="police" element={<PoliceStationList />} />
+              <Route path="police/create" element={<CreatePoliceStation />} />
+              <Route path="tourismAreas" element={<TourismAreaList />} />
               <Route
-                path="policeStation/create"
-                element={<CreatePoliceStation />}
-              />
-              <Route path="tourismArea" element={<TourismAreaList />} />
-              <Route
-                path="tourismArea/create"
+                path="tourismAreas/create"
                 element={<CreateTourismArea />}
               />
               <Route path="healthService" element={<HealthPostList />} />
@@ -62,6 +73,8 @@ const Homepage = () => {
                 path="healthService/create"
                 element={<CreateHealthPost />}
               />
+              <Route path="education" element={<EducationList />} />
+              <Route path="education/create" element={<CreateEducation />} />
               <Route path="event" element={<EventList />} />
               <Route path="event/create" element={<CreateEvent />} />
               <Route path="setting" element={<Settings />} />
@@ -101,11 +114,27 @@ const Homepage = () => {
                 path="/setting/systemConfiguration/healthServiceCategory/create"
                 element={<CreateHealthServiceCategory />}
               />
+              <Route
+                path="/setting/systemConfiguration/educationLevel"
+                element={<EducationLevelList />}
+              />
+              <Route
+                path="/setting/systemConfiguration/educationLevel/create"
+                element={<CreateEducationLevel />}
+              />
+              <Route
+                path="/setting/systemConfiguration/educationOwnership"
+                element={<EducationOwnershipList />}
+              />
+              <Route
+                path="/setting/systemConfiguration/educationOwnership/create"
+                element={<CreateEducationOwnership />}
+              />
             </Routes>
           </div>
         </div>
       </div>
-      <ToastContainer position="top-center" draggable />
+      <ToastContainer position="top-center" />
     </div>
   );
 };

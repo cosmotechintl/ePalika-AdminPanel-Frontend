@@ -10,7 +10,13 @@ const OptionsMenu = ({ menuItems, visible }) => {
       <div className="optionsMenuContents">
         {menuItems.map((item, index) => (
           <div key={index} className="menuListItem">
-            <Link to={item.link}>{item.text}</Link>
+            {item.onClick ? (
+              <a href="#" onClick={item.onClick}>
+                {item.text}
+              </a>
+            ) : (
+              <Link to={item.link}>{item.text}</Link>
+            )}
           </div>
         ))}
       </div>

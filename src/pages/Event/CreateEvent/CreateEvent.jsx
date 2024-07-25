@@ -22,10 +22,11 @@ const CreateEvent = () => {
     let isMounted = true;
     const fetchEventCategory = async () => {
       try {
-        const eventCategories = await adminRequest.post(
+        const eventCategories = await adminRequest.get(
           `${BASE_URL}/eventCategory/get`
         );
         if (isMounted) {
+          toast.success("Event categories fetched successfully");
           setEventCategory(eventCategories.data.data);
           updateAuthToken();
         }
@@ -54,8 +55,8 @@ const CreateEvent = () => {
           name: formData.name,
           description: formData.description,
           eventDate: formData.date,
-          event_category: {
-            name: "Music Concert",
+          eventCategory: {
+            name: formData.category,
           },
         }),
         {

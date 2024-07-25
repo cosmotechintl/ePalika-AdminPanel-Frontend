@@ -1,62 +1,74 @@
 import React, { useEffect, useState } from "react";
-import "./CreateHealthPost.scss";
 import CustomForm from "../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
 
-const CreateHealthPost = () => {
+const CreateEducation = () => {
   const initialFormData = {
     name: "",
     address: "",
     phone: "",
     email: "",
     contactPerson: "",
-    services: "",
+    level: "",
     ward: "",
-    bedCount: "",
-    category: "",
+    ownership: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [wardNo, setWardNo] = useState([]);
-  const [healthType, setHealthType] = useState([]);
+  const [level, setLevel] = useState([]);
+  const [ownership, setOwnership] = useState([]);
+  const [wards, setWards] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
-    const fetchWards = async () => {
+    const fetchLevel = async () => {
       try {
-        const wards = await adminRequest.get(`${BASE_URL}/wardNumbers/get`);
+        const levels = await adminRequest.get(`${BASE_URL}/educationType/get`);
         if (isMounted) {
-          const sortedWards = wards.data.data.sort(
-            (a, b) => parseInt(a.wardNumber) - parseInt(b.wardNumber)
-          );
-          setWardNo(sortedWards);
+          setLevel(levels.data.data);
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch wards at the moment");
+          toast.error("Failed to fetch education level at the moment");
         }
       }
     };
-    const fetchHealthType = async () => {
+    const fetchOwnership = async () => {
       try {
-        const healthType = await adminRequest.get(
-          `${BASE_URL}/healthCategory/get`
+        const ownership = await adminRequest.get(
+          `${BASE_URL}/educationOwnedBy/get`
         );
         if (isMounted) {
-          setHealthType(healthType.data.data);
+          setOwnership(ownership.data.data);
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch health category at the moment");
+          toast.error("Failed to fetch education ownership at the moment");
+        }
+      }
+    };
+    const fetchWards = async () => {
+      try {
+        const ward = await adminRequest.get(`${BASE_URL}/wardNumbers/get`);
+        if (isMounted) {
+          const sortedWards = ward.data.data.sort(
+            (a, b) => parseInt(a.wardNumber) - parseInt(b.wardNumber)
+          );
+          setWards(sortedWards);
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch ward number at the moment");
         }
       }
     };
     updateAuthToken();
-    fetchHealthType();
+    fetchLevel();
+    fetchOwnership();
     fetchWards();
     return () => {
       isMounted = false;
@@ -71,23 +83,24 @@ const CreateHealthPost = () => {
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/healthService/create`, {
+        adminRequest.post(`${BASE_URL}/education/create`, {
           name: formData.name,
           address: formData.address,
           phone: formData.phone,
           email: formData.email,
           contactPerson: formData.contactPerson,
-          services: formData.services,
           ward: {
             wardNumber: formData.ward,
           },
-          bedCount: formData.bedCount,
-          healthCategory: {
-            name: formData.category,
+          educationType: {
+            type: formData.level,
+          },
+          educationOwnedBy: {
+            ownedBy: formData.ownership,
           },
         }),
         {
-          pending: "Creating health service",
+          pending: "Creating educational instiutution",
         }
       );
       if (response.data.code == 0) {
@@ -99,7 +112,7 @@ const CreateHealthPost = () => {
       setFormData(initialFormData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create health service");
+      toast.error("Failed to create educational instiutution");
     } finally {
       setIsSubmitting(false);
     }
@@ -108,7 +121,7 @@ const CreateHealthPost = () => {
   const fields = [
     {
       name: "name",
-      label: "Heath Center Name",
+      label: "Institution Name",
       type: "text",
       value: formData.name,
       onChange: handleChange,
@@ -150,46 +163,46 @@ const CreateHealthPost = () => {
       onChange: handleChange,
       options: [
         { label: "Select Ward No.", value: "" },
-        ...wardNo.map((w) => ({
+        ...wards.map((w) => ({
           label: w.wardNumber,
           value: w.wardNumber,
         })),
       ],
     },
     {
-      name: "bedCount",
-      label: "Bed Count",
-      type: "text",
-      value: formData.bedCount,
-      onChange: handleChange,
-    },
-    {
-      name: "category",
-      label: "Health Category",
+      name: "level",
+      label: "Level",
       type: "select",
-      value: formData.category || "",
+      value: formData.level || "",
       onChange: handleChange,
       options: [
-        { label: "Select Health Category", value: "" },
-        ...healthType.map((hc) => ({
-          label: hc.name,
-          value: hc.name,
+        { label: "Select Level", value: "" },
+        ...level.map((w) => ({
+          label: w.type,
+          value: w.type,
         })),
       ],
     },
     {
-      name: "services",
-      label: "Services",
-      type: "textarea",
-      value: formData.services,
+      name: "ownership",
+      label: "Ownership",
+      type: "select",
+      value: formData.ownership || "",
       onChange: handleChange,
+      options: [
+        { label: "Select Ownership", value: "" },
+        ...ownership.map((w) => ({
+          label: w.ownedBy,
+          value: w.ownedBy,
+        })),
+      ],
     },
   ];
 
   return (
-    <div className="createHealthPostContainer">
+    <div className="createEducationContainer">
       <CustomForm
-        header="Create Health Service"
+        header="Create Educational Institution"
         fields={fields}
         flexDirection="row"
         createButtonLabel="Create"
@@ -201,4 +214,4 @@ const CreateHealthPost = () => {
   );
 };
 
-export default CreateHealthPost;
+export default CreateEducation;

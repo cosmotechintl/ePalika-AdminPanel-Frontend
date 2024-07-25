@@ -11,83 +11,36 @@ const PoliceStationList = () => {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    // let isMounted = true;
-
-    // const fetchPoliceStations = async () => {
-    //   try {
-    //     const policeStation = await adminRequest.post(
-    //       `${BASE_URL}/policeStation`,
-    //       {
-    //         firstRow: 1,
-    //         pageSize: 3,
-    //       }
-    //     );
-    //     const fetchedRows = policeStation.data.data.map((ps) => [
-    //       ps.name,
-    //       ps.address,
-    //       ps.contactPerson,
-    //       ps.phone,
-    //       ps.ward.wardNumber,
-    //     ]);
-    //     if (isMounted) {
-    //       setRows(fetchedRows);
-    //     }
-    //   } catch (error) {
-    //     if (isMounted) {
-    //       toast.error("Failed to fetch police stations");
-    //     }
-    //   }
-    // };
-    // fetchPoliceStations();
-    // return () => {
-    //   isMounted = false;
-    // };
-    const mockData = [
-      {
-        Name: "Kathmandu Metropolitan Police",
-        Address: "Gongabu, Kathmandu, Nepal",
-        contactPerson: "Inspector Sita Sharma",
-        Phone: "+977 1 1234567",
-        Ward: "Kathmandu",
-      },
-      {
-        Name: "Lalitpur District Police Office",
-        Address: "Lalitpur, Nepal",
-        contactPerson: "Sub-Inspector Ramesh Thapa",
-        Phone: "+977 1 2345678",
-        Ward: "Lalitpur",
-      },
-      {
-        Name: "Bhaktapur Police Station",
-        Address: "Bhaktapur, Nepal",
-        contactPerson: "Officer Anil Kumar",
-        Phone: "+977 1 3456789",
-        Ward: "Bhaktapur",
-      },
-      {
-        Name: "Pokhara Police Station",
-        Address: "Pokhara, Kaski, Nepal",
-        contactPerson: "Sergeant Maya Rai",
-        Phone: "+977 61 234567",
-        Ward: "Pokhara",
-      },
-      {
-        Name: "Biratnagar Police Station",
-        Address: "Biratnagar, Morang, Nepal",
-        contactPerson: "Lieutenant Hari Prasad",
-        Phone: "+977 21 456789",
-        Ward: "Biratnagar",
-      },
-    ];
-    const fetchedRows = mockData.map((police) => [
-      police.Name,
-      police.Address,
-      police.contactPerson,
-      police.Phone,
-      police.Ward,
-    ]);
-
-    setRows(fetchedRows);
+    let isMounted = true;
+    const fetchPoliceStations = async () => {
+      try {
+        const policeStation = await adminRequest.post(
+          `${BASE_URL}/policeStation/get`,
+          {
+            firstRow: 1,
+            pageSize: 3,
+          }
+        );
+        const fetchedRows = policeStation.data.data.records.map((ps) => [
+          ps.name,
+          ps.address,
+          ps.contactPerson,
+          ps.phoneNumber,
+          ps.ward.wardNumber,
+        ]);
+        if (isMounted) {
+          setRows(fetchedRows);
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch police stations");
+        }
+      }
+    };
+    fetchPoliceStations();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   updateAuthToken();

@@ -1,36 +1,39 @@
 import React, { useEffect, useState } from "react";
-import List from "../../../../components/List/List";
-import "./EventCategoryList.scss";
+import List from "../../../components/List/List";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { adminRequest, updateAuthToken } from "../../../../utils/requestMethod";
-import { BASE_URL } from "../../../../utils/config";
-import Loader from "../../../../components/Loader/Loader";
-const EventCategoryList = () => {
-  const headers = ["Name", "Description"];
+import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
+import { BASE_URL } from "../../../utils/config";
+import Loader from "../../../components/Loader/Loader";
+const AdminList = () => {
+  const headers = ["Name", "Email", "Mobile", "Access Group", "Status"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
-    const fetchEventCategories = async () => {
+    const fetchAdmin = async () => {
       try {
-        const categories = await adminRequest.get(
-          `${BASE_URL}/eventCategory/get`
-        );
-        const fetchedRows = categories?.data.data.map((c) => [
-          c.name,
-          c.description,
+        const admin = await adminRequest.post(`${BASE_URL}/admin`, {
+          firstRow: 1,
+          pageSize: 3,
+        });
+        const fetchedRows = admin.data.data.records.map((a) => [
+          a.name,
+          a.email,
+          a.mobileNumber,
+          a.accessGroup.name,
+          a.status.name,
         ]);
         if (isMounted) {
           setRows(fetchedRows);
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch event categories");
+          toast.error("Failed to fetch admin list");
         }
       }
     };
-    fetchEventCategories();
+    fetchAdmin();
     return () => {
       isMounted = false;
     };
@@ -45,11 +48,11 @@ const EventCategoryList = () => {
   ];
 
   return (
-    <div className="eventCategoryListContainer">
+    <div className="adminListContainer">
       {rows.length > 0 ? (
         <List
-          title="Event Category Lists"
-          createButtonLabel="Create Event Category"
+          title="Admin List"
+          createButtonLabel="Create Admin"
           headers={headers}
           rows={rows}
           link="create"
@@ -65,4 +68,4 @@ const EventCategoryList = () => {
   );
 };
 
-export default EventCategoryList;
+export default AdminList;

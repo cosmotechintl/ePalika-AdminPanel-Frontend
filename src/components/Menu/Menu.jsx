@@ -8,7 +8,7 @@ const Menu = () => {
   return (
     <div className="menuContainer">
       <div className="menuContents">
-        <Link to="/admin/profile" className="menuItem">
+        <Link to="/profile" className="menuItem">
           <span className="icon">
             <CiUser />
           </span>
@@ -20,7 +20,7 @@ const Menu = () => {
           </span>
           <span className="title">Activity Log</span>
         </div>
-        <Link to="/admin/changePassword" className="menuItem">
+        <Link to="/changePassword" className="menuItem">
           <div className="menuItem">
             <span className="icon">
               <IoLockClosedOutline />

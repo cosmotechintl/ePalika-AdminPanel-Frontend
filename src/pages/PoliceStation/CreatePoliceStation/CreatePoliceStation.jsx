@@ -23,9 +23,12 @@ const CreatePoliceStation = () => {
     let isMounted = true;
     const fetchWards = async () => {
       try {
-        const wards = await adminRequest.post(`${BASE_URL}/wardNo/get`);
+        const wards = await adminRequest.get(`${BASE_URL}/wardNumbers/get`);
         if (isMounted) {
-          setWardNo(wards.data.data);
+          const sortedWards = wards.data.data.sort(
+            (a, b) => parseInt(a.wardNumber) - parseInt(b.wardNumber)
+          );
+          setWardNo(sortedWards);
         }
       } catch (error) {
         if (isMounted) {
@@ -55,7 +58,7 @@ const CreatePoliceStation = () => {
           email: formData.email,
           contactPerson: formData.contactPerson,
           ward: {
-            wardNumber: "formData.ward",
+            wardNumber: formData.ward,
           },
         }),
         {
@@ -117,13 +120,13 @@ const CreatePoliceStation = () => {
       name: "ward",
       label: "Ward No.",
       type: "select",
-      value: formData.category || "",
+      value: formData.ward || "",
       onChange: handleChange,
       options: [
-        { label: "Select Ward", value: "" },
+        { label: "Select Ward No.", value: "" },
         ...wardNo.map((w) => ({
-          label: w.name,
-          value: w.name,
+          label: w.wardNumber,
+          value: w.wardNumber,
         })),
       ],
     },

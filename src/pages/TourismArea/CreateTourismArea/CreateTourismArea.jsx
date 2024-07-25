@@ -24,8 +24,8 @@ const CreateTourismArea = () => {
     let isMounted = true;
     const fetchTourismCategory = async () => {
       try {
-        const tourismCategory = await adminRequest.post(
-          `${BASE_URL}/tourismCategory/get`
+        const tourismCategory = await adminRequest.get(
+          `${BASE_URL}/tourismCategory`
         );
         if (isMounted) {
           setTourismCategory(tourismCategory.data.data);
@@ -45,25 +45,21 @@ const CreateTourismArea = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleEditorChange = (value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      description: value,
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/tourismAreas/create`, {
+        adminRequest.post(`${BASE_URL}/tourismArea/create`, {
           name: formData.name,
           details: formData.description,
           latitude: formData.latitude,
           longitude: formData.longitude,
-          image: formData.image,
-          tourismCategory: formData.category,
+          image: "image.png",
+          tourismCategory: {
+            name: formData.category,
+          },
         }),
         {
           pending: "Creating tourism area",
@@ -123,9 +119,9 @@ const CreateTourismArea = () => {
     {
       name: "description",
       label: "Description",
-      type: "rich-text-editor",
+      type: "textarea",
       value: formData.description,
-      onChange: handleEditorChange,
+      onChange: handleChange,
     },
   ];
 

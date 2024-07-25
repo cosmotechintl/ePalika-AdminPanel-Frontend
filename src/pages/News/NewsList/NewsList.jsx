@@ -4,20 +4,12 @@ import "./NewsList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../../../components/Loader/Loader";
-import { truncateContents } from "../../../utils/truncateContents";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
 import { trimDate } from ".././../../utils/dateUtil";
-import parse from "html-react-parser";
+import Swal from "sweetalert2";
 const NewsList = () => {
-  const headers = [
-    "Title",
-    "Category",
-    "Content",
-    "Author",
-    "Published on",
-    "Code",
-  ];
+  const headers = ["Title", "Category", "Author", "Published on", "Code"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
@@ -30,7 +22,6 @@ const NewsList = () => {
         const fetchedRows = news?.data.data.records.map((news) => [
           news.heading,
           news.newsCategory.name,
-          parse(truncateContents(news.details, 10)),
           news.author,
           trimDate(news.recordedDate),
           news.code,
@@ -44,10 +35,44 @@ const NewsList = () => {
   }, []);
   updateAuthToken();
 
+  const handleDelete = async (code) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete this news item?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#00425A",
+      cancelButtonColor: "#FC0000",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, keep it",
+    });
+    if (result.isConfirmed) {
+      try {
+        const response = await adminRequest.post(`${BASE_URL}/news/delete`, {
+          code: code,
+        });
+        if (response.data.code == 0) {
+          toast.success("News item deleted successfully");
+        } else {
+          toast.error("Failed to delete news item");
+        }
+      } catch (error) {
+        toast.error("Failed to delete news item");
+      }
+    }
+  };
+
   const getMenuItems = (row) => [
-    { link: `view/${row[5]}`, text: "View" },
-    { link: `edit/${row[5]}`, text: "Edit" },
-    { link: `delete/${row[5]}`, text: "Delete" },
+    { link: `view/${row[4]}`, text: "View" },
+    { link: `edit/${row[4]}`, text: "Edit" },
+    {
+      link: "#",
+      text: "Delete",
+      onClick: (e) => {
+        e.preventDefault();
+        handleDelete(row[4]);
+      },
+    },
   ];
   return (
     <div className="newsListContainer">

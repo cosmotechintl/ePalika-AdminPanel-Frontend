@@ -24,11 +24,7 @@ const EditNews = () => {
   const [newsCategory, setNewsCategory] = useState([]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleEditorChange = (value) => {
@@ -38,46 +34,35 @@ const EditNews = () => {
     }));
   };
   useEffect(() => {
-    let isMounted = true;
     const fetchNews = async () => {
       try {
         const response = await adminRequest.post(`${BASE_URL}/news/detail`, {
-          identifier: `${activeURL}`,
+          code: `${activeURL}`,
         });
         setData(response.data);
         setFormData({
-          title: response.data.heading,
-          contents: response.data.details,
-          category: response.data.category.name,
-          image: response.data.image,
+          title: response.data.data.heading,
+          contents: response.data.data.details,
+          category: response.data.data.newsCategory.name,
+          image: response.data.data.image,
         });
-        console.log(response.data);
       } catch (error) {
-        if (isMounted) {
-          toast.error("Failed to fetch news at the moment");
-        }
+        toast.error("Failed to fetch news at the moment");
       }
     };
     const fetchNewsCategory = async () => {
       try {
-        const newsCategories = await adminRequest.post(
+        const newsCategories = await adminRequest.get(
           `${BASE_URL}/newsCategory/get`
         );
-        if (isMounted) {
-          setNewsCategory(newsCategories.data.data);
-          updateAuthToken();
-        }
+        setNewsCategory(newsCategories.data.data);
+        updateAuthToken();
       } catch (error) {
-        if (isMounted) {
-          toast.error("Failed to fetch news category at the moment");
-        }
+        console.log("Failed to fetch news category at the moment");
       }
     };
     fetchNews();
     fetchNewsCategory();
-    return () => {
-      isMounted = false;
-    };
   }, [activeURL]);
 
   updateAuthToken();
@@ -85,17 +70,17 @@ const EditNews = () => {
   if (!data || !data.data) {
     return <Loader />;
   }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     console.log(formData);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/news/update/${activeURL}`, {
+        adminRequest.post(`${BASE_URL}/news/update`, {
+          code: activeURL,
           heading: formData.title,
           newsCategory: {
-            name: "formData.category",
+            name: formData.category,
           },
           details: formData.contents,
           image: formData.image,
@@ -139,8 +124,6 @@ const EditNews = () => {
       onChange: handleChange,
       options: [
         { label: "Select News Category", value: "" },
-        { label: "Education", value: "education" },
-        { label: "Politics", value: "politics" },
         ...newsCategory.map((c) => ({
           label: c.name,
           value: c.name,
@@ -158,7 +141,7 @@ const EditNews = () => {
   return (
     <div className="updateNewsContainer">
       <CustomForm
-        header="Update News"
+        header="Edit News"
         fields={fields}
         flexDirection="row"
         createButtonLabel="Update"

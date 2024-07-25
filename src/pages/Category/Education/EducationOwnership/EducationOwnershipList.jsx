@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from "react";
 import List from "../../../../components/List/List";
-import "./EventCategoryList.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../../utils/requestMethod";
 import { BASE_URL } from "../../../../utils/config";
 import Loader from "../../../../components/Loader/Loader";
-const EventCategoryList = () => {
-  const headers = ["Name", "Description"];
+
+const EducationOwnershipList = () => {
+  const headers = ["Owned By", "Description"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
-    const fetchEventCategories = async () => {
+    const fetchCategories = async () => {
       try {
         const categories = await adminRequest.get(
-          `${BASE_URL}/eventCategory/get`
+          `${BASE_URL}/educationOwnedBy/get`
         );
         const fetchedRows = categories?.data.data.map((c) => [
-          c.name,
-          c.description,
+          c.ownedBy,
+          "Unavailable at the moment",
         ]);
         if (isMounted) {
           setRows(fetchedRows);
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch event categories");
+          toast.error("Failed to fetch education ownership");
         }
       }
     };
-    fetchEventCategories();
+    fetchCategories();
     return () => {
       isMounted = false;
     };
@@ -39,17 +39,16 @@ const EventCategoryList = () => {
   updateAuthToken();
 
   const getMenuItems = (row) => [
-    { link: `view/${row[1]}`, text: "View" },
     { link: `edit/${row[1]}`, text: "Edit" },
     { link: `delete/${row[1]}`, text: "Delete" },
   ];
 
   return (
-    <div className="eventCategoryListContainer">
+    <div className="educationOwnershipListListContainer">
       {rows.length > 0 ? (
         <List
-          title="Event Category Lists"
-          createButtonLabel="Create Event Category"
+          title="Education Ownership Lists"
+          createButtonLabel="Create Education Ownership"
           headers={headers}
           rows={rows}
           link="create"
@@ -65,4 +64,4 @@ const EventCategoryList = () => {
   );
 };
 
-export default EventCategoryList;
+export default EducationOwnershipList;

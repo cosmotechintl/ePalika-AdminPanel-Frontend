@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
-import "./CreateTourismAreaCategory.scss";
+import React, { useState } from "react";
 import CustomForm from "../../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { adminRequest } from "../../../../utils/requestMethod";
 import { BASE_URL } from "../../../../utils/config";
+import { adminRequest } from "../../../../utils/requestMethod";
 
-const CreateTourismAreaCategory = () => {
+const CreateEducationOwnership = () => {
   const initialFormData = {
-    name: "",
-    description: "",
+    ownedBy: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -24,12 +22,11 @@ const CreateTourismAreaCategory = () => {
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/tourismCategory/create`, {
-          name: formData.name,
-          description: formData.description,
+        adminRequest.post(`${BASE_URL}/educationOwnedBy/create`, {
+          ownedBy: formData.ownedBy,
         }),
         {
-          pending: "Creating tourism category",
+          pending: "Creating education ownedby",
         }
       );
       if (response.data.code == 0) {
@@ -41,7 +38,7 @@ const CreateTourismAreaCategory = () => {
       setFormData(initialFormData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create tourism category");
+      toast.error("Failed to create education ownedby");
     } finally {
       setIsSubmitting(false);
     }
@@ -49,25 +46,18 @@ const CreateTourismAreaCategory = () => {
 
   const fields = [
     {
-      name: "name",
-      label: "Name",
+      name: "ownedBy",
+      label: "Owned By",
       type: "text",
-      value: formData.name,
-      onChange: handleChange,
-    },
-    {
-      name: "description",
-      label: "Description",
-      type: "textarea",
-      value: formData.description,
+      value: formData.ownedBy,
       onChange: handleChange,
     },
   ];
 
   return (
-    <div className="createTourismAreaCategoryContainer">
+    <div className="createEducationOwnershipContainer">
       <CustomForm
-        header="Create Tourism Area Category"
+        header="Create Education Ownership"
         fields={fields}
         flexDirection="column"
         createButtonLabel="Create"
@@ -79,4 +69,4 @@ const CreateTourismAreaCategory = () => {
   );
 };
 
-export default CreateTourismAreaCategory;
+export default CreateEducationOwnership;

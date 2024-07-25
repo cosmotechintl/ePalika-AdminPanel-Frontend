@@ -13,6 +13,7 @@ const EventList = () => {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchEvent = async () => {
       try {
         const event = await adminRequest.post(`${BASE_URL}/event/get`, {
@@ -22,15 +23,21 @@ const EventList = () => {
         const fetchedRows = event?.data.data.records.map((event) => [
           event.name,
           trimDate(event.eventDate),
-          event.event_category.name,
+          event.eventCategory.name,
           truncateContents(event.description, 10),
         ]);
-        setRows(fetchedRows);
+        if (isMounted) {
+          setRows(fetchedRows);
+        }
       } catch (error) {
+        console.log(error);
         toast.error("Failed to fetch events");
       }
     };
     fetchEvent();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   updateAuthToken();

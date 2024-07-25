@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Sidebar.scss";
 import { IoHomeOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdDesignServices } from "react-icons/md";
@@ -12,9 +12,11 @@ import { performLogout } from "../../auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import useFetch from "../../hooks/useFetch";
+import { IoSchoolSharp } from "react-icons/io5";
 import { BASE_URL } from "../../utils/config";
 import { adminRequest, updateAuthToken } from "../../utils/requestMethod";
+import { TbMapPin2 } from "react-icons/tb";
+import { GiPoliceCar } from "react-icons/gi";
 const iconMapping = {
   IoHomeOutline,
   IoSettingsOutline,
@@ -24,11 +26,14 @@ const iconMapping = {
   PiSignOut,
   BiHealth,
   FaRegNewspaper,
+  IoSchoolSharp,
+  TbMapPin2,
+  GiPoliceCar,
 };
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const activeURL = location.pathname.split("/")[2];
+  const [navigation, setNavigation] = useState([]);
   const handleSignout = () => {
     performLogout(() => {
       toast.success("Logging Out");
@@ -38,14 +43,30 @@ const Sidebar = () => {
   const goToHome = () => {
     navigate("/");
   };
-  updateAuthToken();
-  const { data, loading, error } = useFetch(
-    `${BASE_URL}/navigation`,
-    adminRequest
-  );
-  if (loading) return <div>Loading...</div>;
-  if (!data || !data.data) return <div>No data available</div>;
-  const sortedData = data.data.sort((a, b) => a.position - b.position);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchNavigation = async () => {
+      try {
+        const navigation = await adminRequest.get(`${BASE_URL}/navigation`);
+        if (isMounted) {
+          updateAuthToken();
+          setNavigation(navigation.data);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.log("Failed to fetch navigation");
+        }
+      }
+    };
+    fetchNavigation();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+  console.log("navigation", navigation.data);
+  if (!navigation) return <div>Loading...</div>;
+  if (!navigation || !navigation.data) return <div>No data available</div>;
+  const sortedData = navigation.data.sort((a, b) => a.position - b.position);
   return (
     <div className="sidebarContainer">
       <div className="sidebarContents">
