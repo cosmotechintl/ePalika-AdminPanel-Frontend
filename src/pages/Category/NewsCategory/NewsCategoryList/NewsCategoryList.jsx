@@ -23,7 +23,7 @@ const NewsCategoryList = () => {
           news.description,
         ]);
         if (isMounted) {
-          toast.success(categories?.data.message);
+          console.log(categories?.data.message);
           setRows(fetchedRows);
         }
       } catch (error) {

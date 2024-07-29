@@ -1,31 +1,55 @@
 import React, { useEffect, useState } from "react";
-import "./CreateHealthPost.scss";
 import CustomForm from "../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
-import { useNavigate } from "react-router-dom";
-const CreateHealthPost = () => {
+import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader/Loader";
+const EditPoliceStation = () => {
+  const location = useLocation();
+  const activeURL = location.pathname.split("/")[3];
   const initialFormData = {
     name: "",
     address: "",
-    phone: "",
-    email: "",
     contactPerson: "",
-    services: "",
+    phoneNumber: "",
+    email: "",
     ward: "",
-    bedCount: "",
-    category: "",
   };
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
+  const [data, setData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [wardNo, setWardNo] = useState([]);
-  const [healthType, setHealthType] = useState([]);
-
   useEffect(() => {
     let isMounted = true;
+    const fetchPoliceStation = async () => {
+      try {
+        const response = await adminRequest.post(
+          `${BASE_URL}/policeStation/detail`,
+          {
+            code: `${activeURL}`,
+          }
+        );
+        if (isMounted) {
+          setData(response.data);
+          setFormData({
+            name: response.data.data.name,
+            address: response.data.data.address,
+            phoneNumber: response.data.data.phoneNumber,
+            email: response.data.data.email,
+            contactPerson: response.data.data.contactPerson,
+            ward: response.data.data.ward.wardNumber,
+          });
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch police station");
+        }
+      }
+    };
+
     const fetchWards = async () => {
       try {
         const wards = await adminRequest.get(`${BASE_URL}/wardNumbers/get`);
@@ -37,31 +61,22 @@ const CreateHealthPost = () => {
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch wards at the moment");
+          console.log("Failed to fetch wards at the moment");
         }
       }
     };
-    const fetchHealthType = async () => {
-      try {
-        const healthType = await adminRequest.get(
-          `${BASE_URL}/healthCategory/get`
-        );
-        if (isMounted) {
-          setHealthType(healthType.data.data);
-        }
-      } catch (error) {
-        if (isMounted) {
-          toast.error("Failed to fetch health category at the moment");
-        }
-      }
-    };
-    updateAuthToken();
-    fetchHealthType();
+    fetchPoliceStation();
     fetchWards();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [activeURL]);
+
+  updateAuthToken();
+
+  if (!data || !data.data) {
+    return <Loader />;
+  }
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -71,23 +86,19 @@ const CreateHealthPost = () => {
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/healthService/create`, {
+        adminRequest.post(`${BASE_URL}/policeStation/update`, {
+          code: activeURL,
           name: formData.name,
           address: formData.address,
-          phone: formData.phone,
+          phoneNumber: formData.phoneNumber,
           email: formData.email,
           contactPerson: formData.contactPerson,
-          services: formData.services,
           ward: {
             wardNumber: formData.ward,
           },
-          bedCount: formData.bedCount,
-          healthCategory: {
-            name: formData.category,
-          },
         }),
         {
-          pending: "Creating health service",
+          pending: "Updating police station",
         }
       );
       if (response.data.code == 0) {
@@ -102,7 +113,7 @@ const CreateHealthPost = () => {
       setFormData(initialFormData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create health service");
+      toast.error("Failed to update police station");
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +122,7 @@ const CreateHealthPost = () => {
   const fields = [
     {
       name: "name",
-      label: "Heath Center Name",
+      label: "Station Name",
       type: "text",
       value: formData.name,
       onChange: handleChange,
@@ -124,25 +135,24 @@ const CreateHealthPost = () => {
       onChange: handleChange,
     },
     {
-      name: "phone",
-      label: "Phone Number",
-      type: "text",
-      value: formData.phone,
-      onChange: handleChange,
-      tail: "Do not include country code",
-    },
-    {
-      name: "email",
-      label: "Email",
-      type: "email",
-      value: formData.email,
-      onChange: handleChange,
-    },
-    {
       name: "contactPerson",
       label: "Contact Person",
       type: "text",
       value: formData.contactPerson,
+      onChange: handleChange,
+    },
+    {
+      name: "phoneNumber",
+      label: "Phone Number",
+      type: "text",
+      value: formData.phoneNumber,
+      onChange: handleChange,
+    },
+    {
+      name: "email",
+      label: "Email",
+      type: "text",
+      value: formData.email,
       onChange: handleChange,
     },
     {
@@ -159,43 +169,15 @@ const CreateHealthPost = () => {
         })),
       ],
     },
-    {
-      name: "bedCount",
-      label: "Bed Count",
-      type: "text",
-      value: formData.bedCount,
-      onChange: handleChange,
-    },
-    {
-      name: "category",
-      label: "Health Category",
-      type: "select",
-      value: formData.category || "",
-      onChange: handleChange,
-      options: [
-        { label: "Select Health Category", value: "" },
-        ...healthType.map((hc) => ({
-          label: hc.name,
-          value: hc.name,
-        })),
-      ],
-    },
-    {
-      name: "services",
-      label: "Services",
-      type: "textarea",
-      value: formData.services,
-      onChange: handleChange,
-    },
   ];
 
   return (
-    <div className="createHealthPostContainer">
+    <div className="createPoliceStationContainer">
       <CustomForm
-        header="Create Health Service"
+        header="Edit Police Station"
         fields={fields}
         flexDirection="row"
-        createButtonLabel="Create"
+        createButtonLabel="Update"
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
@@ -204,4 +186,4 @@ const CreateHealthPost = () => {
   );
 };
 
-export default CreateHealthPost;
+export default EditPoliceStation;

@@ -1,47 +1,77 @@
 import React, { useEffect, useState } from "react";
-import "./CreateEvent.scss";
+import "./EditEvent.scss";
 import CustomForm from "../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
-import { useNavigate } from "react-router-dom";
-
-const CreateEvent = () => {
+import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader/Loader";
+import { trimDate } from "../../../utils/dateUtil";
+const EditEvent = () => {
   const initialFormData = {
     name: "",
     date: "",
     category: "",
     description: "",
   };
+  const location = useLocation();
+  const activeURL = location.pathname.split("/")[3];
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
+  const [data, setData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [eventCategory, setEventCategory] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
+    const fetchEvent = async () => {
+      try {
+        const response = await adminRequest.post(`${BASE_URL}/event/detail`, {
+          code: `${activeURL}`,
+        });
+        if (isMounted) {
+          setData(response.data);
+          setFormData({
+            name: response.data.data.name,
+            date: trimDate(response.data.data.eventDate),
+            description: response.data.data.description,
+            category: response.data.data.eventCategory.name,
+          });
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch event at the moment");
+        }
+      }
+    };
     const fetchEventCategory = async () => {
       try {
         const eventCategories = await adminRequest.get(
           `${BASE_URL}/eventCategory/get`
         );
         if (isMounted) {
-          toast.success("Event categories fetched successfully");
           setEventCategory(eventCategories.data.data);
           updateAuthToken();
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch event category at the moment");
+          console.log("Failed to fetch event category at the moment");
         }
       }
     };
+    fetchEvent();
     fetchEventCategory();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [activeURL]);
+
+  updateAuthToken();
+
+  if (!data || !data.data) {
+    return <Loader />;
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,7 +82,8 @@ const CreateEvent = () => {
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/event/create`, {
+        adminRequest.post(`${BASE_URL}/event/update`, {
+          code: activeURL,
           name: formData.name,
           description: formData.description,
           eventDate: formData.date,
@@ -61,7 +92,7 @@ const CreateEvent = () => {
           },
         }),
         {
-          pending: "Creating Event",
+          pending: "Updating Event",
         }
       );
       if (response.data.code == 0) {
@@ -76,7 +107,7 @@ const CreateEvent = () => {
       setFormData(initialFormData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create event");
+      toast.error("Failed to update event");
     } finally {
       setIsSubmitting(false);
     }
@@ -121,12 +152,12 @@ const CreateEvent = () => {
   ];
 
   return (
-    <div className="createEventContainer">
+    <div className="container">
       <CustomForm
-        header="Create Event"
+        header="Edit Event"
         fields={fields}
         flexDirection="row"
-        createButtonLabel="Create"
+        createButtonLabel="Update"
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
@@ -135,4 +166,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default EditEvent;

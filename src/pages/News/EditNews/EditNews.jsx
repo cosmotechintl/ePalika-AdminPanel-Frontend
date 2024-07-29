@@ -73,7 +73,6 @@ const EditNews = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    console.log(formData);
     try {
       const response = await toast.promise(
         adminRequest.post(`${BASE_URL}/news/update`, {

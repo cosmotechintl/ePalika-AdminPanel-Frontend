@@ -8,6 +8,7 @@ import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
 import { trimDate } from ".././../../utils/dateUtil";
 import Swal from "sweetalert2";
+
 const NewsList = () => {
   const headers = ["Title", "Category", "Author", "Published on", "Code"];
   const [rows, setRows] = useState([]);
@@ -19,13 +20,15 @@ const NewsList = () => {
           firstRow: 1,
           pageSize: 3,
         });
-        const fetchedRows = news?.data.data.records.map((news) => [
-          news.heading,
-          news.newsCategory.name,
-          news.author,
-          trimDate(news.recordedDate),
-          news.code,
-        ]);
+        const fetchedRows = news?.data.data.records
+          .sort((a, b) => new Date(b.recordedDate) - new Date(a.recordedDate))
+          .map((news) => [
+            news.heading,
+            news.newsCategory.name,
+            news.author,
+            trimDate(news.recordedDate),
+            news.code,
+          ]);
         setRows(fetchedRows);
       } catch (error) {
         toast.error("Failed to fetch news");
@@ -43,8 +46,8 @@ const NewsList = () => {
       showCancelButton: true,
       confirmButtonColor: "#00425A",
       cancelButtonColor: "#FC0000",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, keep it",
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
     });
     if (result.isConfirmed) {
       try {
@@ -52,9 +55,9 @@ const NewsList = () => {
           code: code,
         });
         if (response.data.code == 0) {
-          toast.success("News item deleted successfully");
+          toast.success(response.data.message);
         } else {
-          toast.error("Failed to delete news item");
+          toast.error(response.data.message);
         }
       } catch (error) {
         toast.error("Failed to delete news item");

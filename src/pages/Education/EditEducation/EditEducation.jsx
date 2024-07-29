@@ -4,9 +4,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
-import { useNavigate } from "react-router-dom";
-
-const CreateEducation = () => {
+import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader/Loader";
+const EditEducation = () => {
+  const location = useLocation();
+  const activeURL = location.pathname.split("/")[3];
   const initialFormData = {
     name: "",
     address: "",
@@ -19,6 +21,7 @@ const CreateEducation = () => {
   };
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
+  const [data, setData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [level, setLevel] = useState([]);
   const [ownership, setOwnership] = useState([]);
@@ -26,6 +29,36 @@ const CreateEducation = () => {
 
   useEffect(() => {
     let isMounted = true;
+    const fetchEducation = async () => {
+      try {
+        const response = await adminRequest.post(
+          `${BASE_URL}/education/detail`,
+          {
+            code: `${activeURL}`,
+          }
+        );
+        if (isMounted) {
+          setData(response.data);
+          setFormData({
+            name: response.data.data.name,
+            address: response.data.data.address,
+            contactPerson: response.data.data.contactPerson,
+            phone: response.data.data.phone,
+            email: response.data.data.email,
+            level: response.data.data.educationType.type,
+            ownership: response.data.data.educationOwnedBy.ownedBy,
+            ward: response.data.data.ward.wardNumber,
+          });
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error(
+            "Failed to fetch educational institutional at the moment"
+          );
+        }
+      }
+    };
+
     const fetchLevel = async () => {
       try {
         const levels = await adminRequest.get(`${BASE_URL}/educationType/get`);
@@ -69,6 +102,7 @@ const CreateEducation = () => {
     };
     updateAuthToken();
     fetchLevel();
+    fetchEducation();
     fetchOwnership();
     fetchWards();
     return () => {
@@ -78,13 +112,16 @@ const CreateEducation = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  if (!data || !data.data) {
+    return <Loader />;
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/education/create`, {
+        adminRequest.post(`${BASE_URL}/education/update`, {
+          code: activeURL,
           name: formData.name,
           address: formData.address,
           phone: formData.phone,
@@ -101,7 +138,7 @@ const CreateEducation = () => {
           },
         }),
         {
-          pending: "Creating educational instiutution",
+          pending: "Updating educational instiutution",
         }
       );
       if (response.data.code == 0) {
@@ -116,7 +153,7 @@ const CreateEducation = () => {
       setFormData(initialFormData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create educational instiutution");
+      toast.error("Failed to update educational instiutution");
     } finally {
       setIsSubmitting(false);
     }
@@ -204,12 +241,12 @@ const CreateEducation = () => {
   ];
 
   return (
-    <div className="createEducationContainer">
+    <div className="editEducationContainer">
       <CustomForm
-        header="Create Educational Institution"
+        header="Edit Educational Institution"
         fields={fields}
         flexDirection="row"
-        createButtonLabel="Create"
+        createButtonLabel="Update"
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
@@ -218,4 +255,4 @@ const CreateEducation = () => {
   );
 };
 
-export default CreateEducation;
+export default EditEducation;

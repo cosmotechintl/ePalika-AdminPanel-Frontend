@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "./CreateHealthPost.scss";
 import CustomForm from "../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader/Loader";
 const CreateHealthPost = () => {
+  const location = useLocation();
+  const activeURL = location.pathname.split("/")[3];
   const initialFormData = {
     name: "",
     address: "",
@@ -20,12 +22,39 @@ const CreateHealthPost = () => {
   };
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
+  const [data, setData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [wardNo, setWardNo] = useState([]);
   const [healthType, setHealthType] = useState([]);
 
   useEffect(() => {
     let isMounted = true;
+    const fetchHealthService = async () => {
+      try {
+        const response = await adminRequest.post(
+          `${BASE_URL}/healthService/detail`,
+          {
+            code: `${activeURL}`,
+          }
+        );
+        if (isMounted) {
+          setData(response.data);
+          setFormData({
+            name: response.data.data.name,
+            address: response.data.data.address,
+            phone: response.data.data.phone,
+            email: response.data.data.email,
+            contactPerson: response.data.data.contactPerson,
+            services: response.data.data.services,
+            ward: response.data.data.ward.wardNumber,
+            bedCount: response.data.data.bedCount,
+            category: response.data.data.healthCategory.name,
+          });
+        }
+      } catch (error) {
+        toast.error("Failed to fetch health service at the moment");
+      }
+    };
     const fetchWards = async () => {
       try {
         const wards = await adminRequest.get(`${BASE_URL}/wardNumbers/get`);
@@ -55,13 +84,19 @@ const CreateHealthPost = () => {
         }
       }
     };
-    updateAuthToken();
+    fetchHealthService();
     fetchHealthType();
     fetchWards();
     return () => {
       isMounted = false;
     };
   }, []);
+
+  updateAuthToken();
+
+  if (!data || !data.data) {
+    return <Loader />;
+  }
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -71,7 +106,8 @@ const CreateHealthPost = () => {
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/healthService/create`, {
+        adminRequest.post(`${BASE_URL}/healthService/update`, {
+          code: activeURL,
           name: formData.name,
           address: formData.address,
           phone: formData.phone,
@@ -87,7 +123,7 @@ const CreateHealthPost = () => {
           },
         }),
         {
-          pending: "Creating health service",
+          pending: "Updating health service",
         }
       );
       if (response.data.code == 0) {
@@ -102,7 +138,7 @@ const CreateHealthPost = () => {
       setFormData(initialFormData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create health service");
+      toast.error("Failed to update health service");
     } finally {
       setIsSubmitting(false);
     }
@@ -190,12 +226,12 @@ const CreateHealthPost = () => {
   ];
 
   return (
-    <div className="createHealthPostContainer">
+    <div className="container">
       <CustomForm
-        header="Create Health Service"
+        header="Edit Health Service"
         fields={fields}
         flexDirection="row"
-        createButtonLabel="Create"
+        createButtonLabel="Update"
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />

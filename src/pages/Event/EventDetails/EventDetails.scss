@@ -1,0 +1,79 @@
+// Colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+$color-white: #f1f1f1f1;
+$color-red: #ef233c;
+$border-color: rgba(128, 128, 128, 0.378);
+.eventDetailsContainer {
+  width: 85%;
+  .eventDetailsContents {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    .eventDetailsTop {
+      color: $color-dark;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      .backArrow {
+        margin-top: 2px;
+        font-size: 25px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .eventHeading {
+        font-size: 25px;
+        font-weight: 400;
+        color: $color-dark;
+      }
+    }
+    .eventDetailsBody {
+      padding: 1rem;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      .eventTitle {
+        font-size: 22px;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+      .eventDescription {
+        font-size: 15px;
+        font-weight: 400;
+        color: $color-dark;
+        line-height: 1.5;
+        text-align: justify;
+      }
+      .eventDetailsContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .eventDateContainer,
+        .eventCategoryContainer,
+        .eventStatusContainer {
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
+        }
+        .dateHeading,
+        .categoryHeading,
+        .statusHeading {
+          font-size: 15px;
+          color: darken($color-small, 20%);
+        }
+        .eventDate,
+        .eventCategory,
+        .eventStatus {
+          font-weight: 500;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}

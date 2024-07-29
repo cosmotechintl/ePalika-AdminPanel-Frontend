@@ -8,8 +8,9 @@ import Loader from "../../../components/Loader/Loader";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
 import { trimDate } from "../../../utils/dateUtil";
+import Swal from "sweetalert2";
 const EventList = () => {
-  const headers = ["Name", "Date", "Category", "Description"];
+  const headers = ["Name", "Date", "Category", "Description", "Code"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ const EventList = () => {
           trimDate(event.eventDate),
           event.eventCategory.name,
           truncateContents(event.description, 10),
+          event.code,
         ]);
         if (isMounted) {
           setRows(fetchedRows);
@@ -41,11 +43,44 @@ const EventList = () => {
   }, []);
 
   updateAuthToken();
+  const handleDelete = async (code) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete this event?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#00425A",
+      cancelButtonColor: "#FC0000",
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
+    });
+    if (result.isConfirmed) {
+      try {
+        const response = await adminRequest.post(`${BASE_URL}/event/delete`, {
+          code: code,
+        });
+        if (response.data.code == 0) {
+          toast.success("Event deleted successfully");
+        } else {
+          toast.error("Failed to delete event");
+        }
+      } catch (error) {
+        toast.error("Failed to delete event");
+      }
+    }
+  };
 
   const getMenuItems = (row) => [
-    { link: `view/${row[1]}`, text: "View" },
-    { link: `edit/${row[1]}`, text: "Edit" },
-    { link: `delete/${row[1]}`, text: "Delete" },
+    { link: `view/${row[4]}`, text: "View" },
+    { link: `edit/${row[4]}`, text: "Edit" },
+    {
+      link: "#",
+      text: "Delete",
+      onClick: (e) => {
+        e.preventDefault();
+        handleDelete(row[4]);
+      },
+    },
   ];
 
   return (

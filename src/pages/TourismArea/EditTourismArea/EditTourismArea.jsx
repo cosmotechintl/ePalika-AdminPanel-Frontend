@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "./CreateTourismArea.scss";
 import CustomForm from "../../../components/CustomForm/CustomForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
-import { useNavigate } from "react-router-dom";
-const CreateTourismArea = () => {
+import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader/Loader";
+const EditTourismArea = () => {
+  const location = useLocation();
+  const activeURL = location.pathname.split("/")[3];
   const initialFormData = {
     name: "",
     category: "",
@@ -17,11 +19,37 @@ const CreateTourismArea = () => {
   };
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
+  const [data, setData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tourismCategory, setTourismCategory] = useState([]);
-
   useEffect(() => {
     let isMounted = true;
+    const fetchTourismArea = async () => {
+      try {
+        const response = await adminRequest.post(
+          `${BASE_URL}/tourismArea/detail`,
+          {
+            code: `${activeURL}`,
+          }
+        );
+        if (isMounted) {
+          setData(response.data);
+          setFormData({
+            name: response.data.data.name,
+            latitude: response.data.data.latitude,
+            longitude: response.data.data.longitude,
+            category: response.data.data.tourismCategory.name,
+            description: response.data.data.details,
+            image: response.data.data.image,
+          });
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.error("Failed to fetch tourism area");
+        }
+      }
+    };
+
     const fetchTourismCategory = async () => {
       try {
         const tourismCategory = await adminRequest.get(
@@ -32,16 +60,21 @@ const CreateTourismArea = () => {
         }
       } catch (error) {
         if (isMounted) {
-          toast.error("Failed to fetch tourism category at the moment");
+          console.log("Failed to fetch tourism category at the moment");
         }
       }
     };
-    updateAuthToken();
+    fetchTourismArea();
     fetchTourismCategory();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [activeURL]);
+  updateAuthToken();
+
+  if (!data || !data.data) {
+    return <Loader />;
+  }
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -51,7 +84,8 @@ const CreateTourismArea = () => {
     setIsSubmitting(true);
     try {
       const response = await toast.promise(
-        adminRequest.post(`${BASE_URL}/tourismArea/create`, {
+        adminRequest.post(`${BASE_URL}/tourismArea/update`, {
+          code: activeURL,
           name: formData.name,
           details: formData.description,
           latitude: formData.latitude,
@@ -62,7 +96,7 @@ const CreateTourismArea = () => {
           },
         }),
         {
-          pending: "Creating tourism area",
+          pending: "Updating tourism area",
         }
       );
       if (response.data.code == 0) {
@@ -77,7 +111,7 @@ const CreateTourismArea = () => {
       setFormData(initialFormData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create tourism area");
+      toast.error("Failed to update tourism area");
     } finally {
       setIsSubmitting(false);
     }
@@ -131,10 +165,10 @@ const CreateTourismArea = () => {
   return (
     <div className="createTourismAreaContainer">
       <CustomForm
-        header="Create Tourism Area"
+        header="Edit Tourism Area"
         fields={fields}
         flexDirection="row"
-        createButtonLabel="Create"
+        createButtonLabel="Update"
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
@@ -143,4 +177,4 @@ const CreateTourismArea = () => {
   );
 };
 
-export default CreateTourismArea;
+export default EditTourismArea;

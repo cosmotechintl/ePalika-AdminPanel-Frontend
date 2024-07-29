@@ -9,7 +9,7 @@ const Settings = () => {
       <div className="settingPageContents">
         <div className="headerTitle">Settings</div>
         <div className="settingsCard">
-          <Link to="group" style={{ textDecoration: "none" }}>
+          <Link to="/accessGroup" style={{ textDecoration: "none" }}>
             <Card icon={<MdGroups />} title="Access Groups" />
           </Link>
           <Link to="systemConfiguration" style={{ textDecoration: "none" }}>

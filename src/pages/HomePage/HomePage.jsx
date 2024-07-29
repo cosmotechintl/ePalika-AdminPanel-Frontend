@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./HomePage.scss";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
@@ -36,8 +36,22 @@ import EducationList from "../Education/EducationList/EducationList";
 import CreateEducation from "../Education/CreateEducation/CreateEducation";
 import UserProfile from "../UserProfile/UserProfile";
 import ChangePassword from "../ChangePassword/ChangePassword";
+import AccessGroupList from "../AccessGroup/AccessGroupList/AccessGroupList";
+import CreateAccessGroup from "../AccessGroup/CreateAccessGroup/CreateAccessGroup";
+import CreateAdmin from "../Admin/CreateAdmin/CreateAdmin";
+import Services from "../Services/Services";
+import { useAuth } from "../../auth/useAuth";
+import ViewNews from "../News/ViewNews/ViewNews";
+import EditEvent from "../Event/EditEvent/EditEvent";
+import EditHealthPost from "../HealthPost/EditHealthPost/EditHealthPost";
+import EditEducation from "../Education/EditEducation/EditEducation";
+import EditTourismArea from "../TourismArea/EditTourismArea/EditTourismArea";
+import EditPoliceStation from "../PoliceStation/EditPoliceStation/EditPoliceStation";
+import EventDetails from "../Event/EventDetails/EventDetails";
+import HealthPostDetails from "../HealthPost/HealthPostDetails/HealthPostDetails";
 
 const Homepage = () => {
+  useAuth();
   return (
     <div className="homepageContainer">
       <div className="homepageContents">
@@ -55,28 +69,52 @@ const Homepage = () => {
           <div className="homepageContents__right">
             <Routes>
               <Route path="/profile" element={<UserProfile />} />
+              <Route path="/services" element={<Services />} />
               <Route path="/changePassword" element={<ChangePassword />} />
+              <Route path="/accessGroup" element={<AccessGroupList />} />
+              <Route
+                path="/accessGroup/create"
+                element={<CreateAccessGroup />}
+              />
               <Route path="adminUser" element={<AdminList />} />
+              <Route path="/adminUser/create" element={<CreateAdmin />} />
               <Route path="/adminUser/view/:email" element={<AdminDetails />} />
               <Route path="news" element={<NewsList />} />
               <Route path="news/create" element={<CreateNews />} />
-              <Route path="news/view/:code" element={<EditNews />} />
+              <Route path="/news/edit/:code" element={<EditNews />} />
+              <Route path="/news/view/:code" element={<ViewNews />} />
               <Route path="police" element={<PoliceStationList />} />
               <Route path="police/create" element={<CreatePoliceStation />} />
+              <Route path="police/edit/:code" element={<EditPoliceStation />} />
               <Route path="tourismAreas" element={<TourismAreaList />} />
               <Route
                 path="tourismAreas/create"
                 element={<CreateTourismArea />}
+              />
+              <Route
+                path="tourismAreas/edit/:code"
+                element={<EditTourismArea />}
               />
               <Route path="healthService" element={<HealthPostList />} />
               <Route
                 path="healthService/create"
                 element={<CreateHealthPost />}
               />
+              <Route
+                path="/healthService/edit/:code"
+                element={<EditHealthPost />}
+              />
+              <Route
+                path="/healthService/view/:code"
+                element={<HealthPostDetails />}
+              />
               <Route path="education" element={<EducationList />} />
               <Route path="education/create" element={<CreateEducation />} />
+              <Route path="/education/edit/:code" element={<EditEducation />} />
               <Route path="event" element={<EventList />} />
+              <Route path="event/view/:code" element={<EventDetails />} />
               <Route path="event/create" element={<CreateEvent />} />
+              <Route path="/event/edit/:code" element={<EditEvent />} />
               <Route path="setting" element={<Settings />} />
               <Route
                 path="setting/systemConfiguration"

@@ -5,13 +5,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BASE_URL } from "../../../../utils/config";
 import { adminRequest } from "../../../../utils/requestMethod";
-
+import { useNavigate } from "react-router-dom";
 const CreateNewsCategory = () => {
   const initialFormData = {
     name: "",
     description: "",
   };
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,7 +33,10 @@ const CreateNewsCategory = () => {
         }
       );
       if (response.data.code == 0) {
-        toast.success(response.data.message);
+        toast.success(response.data.message, {
+          autoClose: 500,
+          onClose: () => navigate(-1),
+        });
       }
       if (response.data.code != 0) {
         toast.error(response.data.message);

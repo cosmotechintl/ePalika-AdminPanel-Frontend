@@ -1,0 +1,159 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon:#2384b4;
+$border-color:rgba(128, 128, 128, 0.378);
+$color-white:#F1F1F1F1;
+.createAccessGroupContainer{
+    font-family: 'poppins',sans-serif;
+    .createAccessGroupContents{
+        .accessGroupTop{
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 30px;
+            color:$color-dark;
+            .accessGroupBackIcon{
+                margin-top: 4px;
+                font-size: 20px;
+                color: $color-dark;
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+            .accessGroupHeaderTitle{
+                font-size: 20px;
+                font-weight: 400;
+                color: $color-dark;
+            }
+        }
+        .accessGroupBottom{
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            form{
+                display: flex;
+                gap: 30px;
+                flex-direction: column;
+                flex-wrap: wrap;
+                .inputGroup{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    label{
+                        text-transform: capitalize;
+                        font-weight: 600;
+                        font-size: 12px;
+                        color:$color-dark;
+                    }
+                    input{
+                        outline: 0;
+                        padding:5px;
+                        min-height: 25px;
+                        width: 300px;
+                        border: 1px solid $color-dark;
+                    }
+                    textarea{
+                        outline: 0;
+                        padding:5px;
+                        min-height: 100px;
+                        width: 300px;
+                        border: 1px solid $color-dark;
+                        font-family: 'poppins',sans-serif;
+                    }
+                    select{
+                        outline: 0;
+                        padding:5px;
+                        min-height: 35px;
+                        width: 310px;
+                        border: 1px solid $color-dark;
+                    }
+                }
+                .rolesContainer{
+                    margin-top: -1rem;
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 14px;
+                    gap: 3px;
+                    .parentRole{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        .iconDrop{
+                            font-size: 20px;
+                            &:hover{
+                                cursor: pointer;
+                            }
+                        }
+                        .parentRole__checkbox{
+                            margin-bottom: 5px;
+                        }
+                    }
+                    .childRoles{
+                        display: flex;
+                        flex-direction: column;
+                        // gap: 3px;
+                        padding-left: 30px;
+                        .childRole{
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                        }
+                    }
+                    .childRolesInner{
+                        display: flex;
+                        flex-direction: column;
+                        // gap: 3px;
+                        padding-left: 40px;
+                        .childRoleInner{
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                        }
+                    }
+                }
+            }
+            .btn-group{
+                display: flex;
+                gap:1rem;
+                .create-btn{
+                    border:0;
+                    outline:0;
+                    background-color: $primary-color;
+                    color: lighten($color-white,5%);
+                    height: 40px;
+                    font-size: 15px;
+                    width:max-content;
+                    padding: 10px 20px;
+                    transition: 300ms all ease-in-out;
+                    font-weight: 600;
+                    &:hover{
+                        cursor: pointer;
+                        background-color: darken($primary-color,5%);
+                    }
+                }
+                .cancel-btn{
+                    border:0;
+                    outline:0;
+                    color: $primary-color;
+                    background-color: lighten($color-white,5%);
+                    border:2px solid $primary-color;
+                    height: 40px;
+                    font-size: 15px;
+                    width:max-content;
+                    padding: 10px 20px;
+                    transition: 300ms all ease-in-out;
+                    font-weight: 600;
+                    &:hover{
+                        color: lighten($color-white,5%);
+                        cursor: pointer;
+                        background-color: darken($primary-color,5%);
+                    }
+                }
+            }
+        }
+    }
+}

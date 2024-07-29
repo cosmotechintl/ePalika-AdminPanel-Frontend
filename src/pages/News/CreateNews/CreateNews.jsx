@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
+import { useNavigate } from "react-router-dom";
 const CreateNews = () => {
   const initialFormData = {
     title: "",
@@ -12,7 +13,7 @@ const CreateNews = () => {
     category: "",
     image: "",
   };
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newsCategory, setNewsCategory] = useState([]);
@@ -66,14 +67,18 @@ const CreateNews = () => {
           },
           details: formData.contents,
           // image: formData.image,
-          image: "image.jpg",
+          image:
+            "https://about.fb.com/wp-content/uploads/2023/09/GettyImages-686732223.jpg",
         }),
         {
           pending: "Posting News",
         }
       );
       if (response.data.code == 0) {
-        toast.success(response.data.message);
+        toast.success(response.data.message, {
+          autoClose: 500,
+          onClose: () => navigate(-1),
+        });
       }
       if (response.data.code != 0) {
         toast.error(response.data.message);

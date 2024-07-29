@@ -2,33 +2,23 @@ import React, { useEffect, useState } from "react";
 import "./Sidebar.scss";
 import { IoHomeOutline, IoSettingsOutline } from "react-icons/io5";
 import { MdDesignServices } from "react-icons/md";
-import { BiHealth } from "react-icons/bi";
-import { FaRegNewspaper } from "react-icons/fa";
 import { GrUserAdmin } from "react-icons/gr";
 import { PiSignOut } from "react-icons/pi";
-import { MdEventAvailable } from "react-icons/md";
 import SidebarMenu from "../SidebarMenu/SidebarMenu";
 import { performLogout } from "../../auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { IoSchoolSharp } from "react-icons/io5";
 import { BASE_URL } from "../../utils/config";
 import { adminRequest, updateAuthToken } from "../../utils/requestMethod";
-import { TbMapPin2 } from "react-icons/tb";
-import { GiPoliceCar } from "react-icons/gi";
+import { GrServices } from "react-icons/gr";
 const iconMapping = {
   IoHomeOutline,
   IoSettingsOutline,
   MdDesignServices,
-  MdEventAvailable,
   GrUserAdmin,
   PiSignOut,
-  BiHealth,
-  FaRegNewspaper,
-  IoSchoolSharp,
-  TbMapPin2,
-  GiPoliceCar,
+  GrServices,
 };
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -63,7 +53,6 @@ const Sidebar = () => {
       isMounted = false;
     };
   }, []);
-  console.log("navigation", navigation.data);
   if (!navigation) return <div>Loading...</div>;
   if (!navigation || !navigation.data) return <div>No data available</div>;
   const sortedData = navigation.data.sort((a, b) => a.position - b.position);
