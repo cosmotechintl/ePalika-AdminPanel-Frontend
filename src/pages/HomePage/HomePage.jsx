@@ -159,16 +159,16 @@ const Homepage = () => {
                 element={<EducationDetails />}
               />
               <Route path="event" element={<EventList />} />
-              <Route path="event/view/:code" element={<EventDetails />} />
-              <Route path="event/create" element={<CreateEvent />} />
+              <Route path="/event/view/:code" element={<EventDetails />} />
+              <Route path="/event/create" element={<CreateEvent />} />
               <Route path="/event/edit/:code" element={<EditEvent />} />
               <Route path="helpLine" element={<HelpLineList />} />
               <Route path="/helpLine/create" element={<CreateHelpLine />} />
               <Route path="/helpLine/edit/:code" element={<EditHelpLine />} />
               <Route path="finance" element={<FinanceList />} />
-              <Route path="finance/view/:code" element={<FinanceDetails />} />
-              <Route path="finance/create" element={<CreateFinance />} />
-              <Route path="finance/edit/:code" element={<EditFinance />} />
+              <Route path="/finance/view/:code" element={<FinanceDetails />} />
+              <Route path="/finance/create" element={<CreateFinance />} />
+              <Route path="/finance/edit/:code" element={<EditFinance />} />
               <Route path="setting" element={<Settings />} />
               <Route
                 path="setting/systemConfiguration"
