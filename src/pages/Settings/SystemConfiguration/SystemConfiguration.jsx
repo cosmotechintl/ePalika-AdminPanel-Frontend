@@ -9,6 +9,9 @@ import { MdEventAvailable } from "react-icons/md";
 import { TbMapPin2 } from "react-icons/tb";
 import { IoSchoolSharp } from "react-icons/io5";
 import { BiHealth } from "react-icons/bi";
+import { TbDeviceLandlinePhone } from "react-icons/tb";
+import { BsBank } from "react-icons/bs";
+
 const SystemConfiguration = () => {
   const navigate = useNavigate();
   const handleBackClick = () => {
@@ -41,6 +44,12 @@ const SystemConfiguration = () => {
           </Link>
           <Link to="educationOwnership" style={{ textDecoration: "none" }}>
             <Card icon={<BiSolidInstitution />} title="Education Ownership" />
+          </Link>
+          <Link to="helpLineCategory" style={{ textDecoration: "none" }}>
+            <Card icon={<TbDeviceLandlinePhone />} title="Helpline Category" />
+          </Link>
+          <Link to="financeCategory" style={{ textDecoration: "none" }}>
+            <Card icon={<BsBank />} title="Financial Institution Category" />
           </Link>
         </div>
       </div>

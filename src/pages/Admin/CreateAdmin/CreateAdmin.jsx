@@ -43,7 +43,6 @@ const CreateAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
       const response = await toast.promise(
         adminRequest.post(`${BASE_URL}/admin/create`, {

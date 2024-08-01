@@ -10,30 +10,32 @@ import { trimDate } from ".././../../utils/dateUtil";
 import Swal from "sweetalert2";
 
 const NewsList = () => {
-  const headers = ["Title", "Category", "Author", "Published on", "Code"];
+  const headers = ["Title", "Category", "Author", "Published on", "Status"];
   const [rows, setRows] = useState([]);
 
+  const fetchNews = async () => {
+    try {
+      const newsResponse = await adminRequest.post(`${BASE_URL}/news/get`, {
+        firstRow: 1,
+        pageSize: 3,
+      });
+      const fetchedRows = newsResponse.data.data.records.map((news) => ({
+        displayData: [
+          news.heading,
+          news.newsCategory.name,
+          news.author,
+          trimDate(news.recordedDate),
+          news.status.name,
+        ],
+        code: news.code,
+      }));
+      setRows(fetchedRows);
+    } catch (error) {
+      console.log("Failed to fetch news");
+    }
+  };
+
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const news = await adminRequest.post(`${BASE_URL}/news/get`, {
-          firstRow: 1,
-          pageSize: 3,
-        });
-        const fetchedRows = news?.data.data.records
-          .sort((a, b) => new Date(b.recordedDate) - new Date(a.recordedDate))
-          .map((news) => [
-            news.heading,
-            news.newsCategory.name,
-            news.author,
-            trimDate(news.recordedDate),
-            news.code,
-          ]);
-        setRows(fetchedRows);
-      } catch (error) {
-        toast.error("Failed to fetch news");
-      }
-    };
     fetchNews();
   }, []);
   updateAuthToken();
@@ -56,6 +58,7 @@ const NewsList = () => {
         });
         if (response.data.code == 0) {
           toast.success(response.data.message);
+          fetchNews();
         } else {
           toast.error(response.data.message);
         }
@@ -66,14 +69,14 @@ const NewsList = () => {
   };
 
   const getMenuItems = (row) => [
-    { link: `view/${row[4]}`, text: "View" },
-    { link: `edit/${row[4]}`, text: "Edit" },
+    { link: `view/${row.code}`, text: "View" },
+    { link: `edit/${row.code}`, text: "Edit" },
     {
       link: "#",
       text: "Delete",
       onClick: (e) => {
         e.preventDefault();
-        handleDelete(row[4]);
+        handleDelete(row.code);
       },
     },
   ];
@@ -84,11 +87,13 @@ const NewsList = () => {
           title="News Lists"
           createButtonLabel="Create News"
           headers={headers}
-          rows={rows}
+          rows={rows.map((row) => row.displayData)}
           link="create"
           showEyeViewIcon={false}
           showFilterIcon={true}
-          getMenuItems={getMenuItems}
+          getMenuItems={(row) =>
+            getMenuItems(rows.find((r) => r.displayData === row))
+          }
         />
       ) : (
         <Loader />

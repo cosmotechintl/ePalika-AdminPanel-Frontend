@@ -6,7 +6,7 @@ import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
-const CreateHealthPost = () => {
+const EditHealthPost = () => {
   const location = useLocation();
   const activeURL = location.pathname.split("/")[3];
   const initialFormData = {
@@ -240,4 +240,4 @@ const CreateHealthPost = () => {
   );
 };
 
-export default CreateHealthPost;
+export default EditHealthPost;

@@ -1,0 +1,73 @@
+///colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$border-color: rgba(128, 128, 128, 0.378);
+$color-white: #f1f1f1f1;
+.editTermsAndCondition {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  .editTermsAndConditionHeader {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .headerLeft {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 25px;
+      .backArrow {
+        margin-top: 5px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .headerRight {
+      .btn-group {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+        .create-btn {
+          border: 0;
+          outline: 0;
+          background-color: $primary-color;
+          color: lighten($color-white, 5%);
+          height: 40px;
+          font-size: 15px;
+          width: max-content;
+          padding: 10px 20px;
+          transition: 300ms all ease-in-out;
+          font-weight: 600;
+          &:hover {
+            cursor: pointer;
+            background-color: darken($primary-color, 5%);
+          }
+        }
+        .cancel-btn {
+          border: 0;
+          outline: 0;
+          color: $primary-color;
+          background-color: lighten($color-white, 5%);
+          border: 2px solid $primary-color;
+          height: 40px;
+          font-size: 15px;
+          width: max-content;
+          padding: 10px 20px;
+          transition: 300ms all ease-in-out;
+          font-weight: 600;
+          &:hover {
+            color: lighten($color-white, 5%);
+            cursor: pointer;
+            background-color: darken($primary-color, 5%);
+          }
+        }
+      }
+    }
+  }
+}

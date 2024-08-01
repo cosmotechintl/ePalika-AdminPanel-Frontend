@@ -14,38 +14,37 @@ const EducationList = () => {
     "Email",
     "Level",
     "Ownership",
-    "Code",
+    "Status",
   ];
   const [rows, setRows] = useState([]);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchData = async () => {
-      try {
-        const data = await adminRequest.post(`${BASE_URL}/education`, {
-          firstRow: 1,
-          pageSize: 3,
-        });
-        const fetchedRows = data.data.data.records.map((e) => [
+  const fetchData = async () => {
+    try {
+      const data = await adminRequest.post(`${BASE_URL}/education`, {
+        firstRow: 1,
+        pageSize: 3,
+      });
+      const fetchedRows = data.data.data.records.map((e) => ({
+        displayData: [
           e.name,
           e.address,
           e.phone,
           e.email,
           e.educationType.type,
           e.educationOwnedBy.ownedBy,
-          e.code,
-        ]);
-        if (isMounted) {
-          setRows(fetchedRows);
-        }
-      } catch (error) {
-        if (isMounted) {
-          toast.error("Failed to education institutions");
-        }
-      }
-    };
-    fetchData();
+          e.status.name,
+        ],
+        code: e.code,
+      }));
+      setRows(fetchedRows);
+    } catch (error) {
+      toast.error("Failed to education institutions");
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) fetchData();
     return () => {
       isMounted = false;
     };
@@ -73,23 +72,24 @@ const EducationList = () => {
         );
         if (response.data.code == 0) {
           toast.success("Education institution deleted successfully");
+          fetchData();
         } else {
           toast.error("Failed to delete education institution");
         }
       } catch (error) {
-        toast.error("Failed to delete education institution");
+        console.log(error);
       }
     }
   };
   const getMenuItems = (row) => [
-    { link: `view/${row[6]}`, text: "View" },
-    { link: `edit/${row[6]}`, text: "Edit" },
+    { link: `view/${row.code}`, text: "View" },
+    { link: `edit/${row.code}`, text: "Edit" },
     {
       link: "#",
       text: "Delete",
       onClick: (e) => {
         e.preventDefault();
-        handleDelete(row[6]);
+        handleDelete(row.code);
       },
     },
   ];
@@ -101,11 +101,13 @@ const EducationList = () => {
           title="Educational Institution Lists"
           createButtonLabel="Create Education"
           headers={headers}
-          rows={rows}
+          rows={rows.map((row) => row.displayData)}
           link="create"
           showEyeViewIcon={false}
           showFilterIcon={true}
-          getMenuItems={getMenuItems}
+          getMenuItems={(row) =>
+            getMenuItems(rows.find((r) => r.displayData === row))
+          }
         />
       ) : (
         <Loader />

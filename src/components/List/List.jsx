@@ -10,6 +10,7 @@ const List = ({
   title = "Default Title",
   link = "/",
   createButtonLabel = "Create Button",
+  showCreateButtonLabel = true,
   headers = [],
   rows = [],
   showEyeViewIcon = true,
@@ -64,12 +65,14 @@ const List = ({
                 <FaFilter />
               </span>
             )}
-            <span className="createButton" onClick={handleCreateButtonClick}>
-              <span className="title">{createButtonLabel}</span>
-              <span className="addIcon">
-                <IoIosAddCircle />
+            {showCreateButtonLabel && (
+              <span className="createButton" onClick={handleCreateButtonClick}>
+                <span className="title">{createButtonLabel}</span>
+                <span className="addIcon">
+                  <IoIosAddCircle />
+                </span>
               </span>
-            </span>
+            )}
           </span>
         </div>
         <div className="bottom">

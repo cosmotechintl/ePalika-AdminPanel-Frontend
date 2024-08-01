@@ -14,6 +14,8 @@ import { IoSchoolSharp } from "react-icons/io5";
 import { MdEventAvailable } from "react-icons/md";
 import { BiHealth } from "react-icons/bi";
 import { FaRegNewspaper } from "react-icons/fa";
+import { TbDeviceLandlinePhone } from "react-icons/tb";
+import { BsBank } from "react-icons/bs";
 const iconMapping = {
   TbMapPin2,
   GiPoliceCar,
@@ -21,6 +23,8 @@ const iconMapping = {
   MdEventAvailable,
   BiHealth,
   FaRegNewspaper,
+  TbDeviceLandlinePhone,
+  BsBank,
 };
 const Services = () => {
   const [services, setServices] = useState([]);

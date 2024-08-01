@@ -1,7 +1,8 @@
 import React from "react";
 import "./Settings.scss";
 import Card from "../../components/Card/Card";
-import { MdGroups, MdPolicy, MdMiscellaneousServices } from "react-icons/md";
+import { MdGroups, MdMiscellaneousServices } from "react-icons/md";
+import { FaRegFileAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 const Settings = () => {
   return (
@@ -17,6 +18,9 @@ const Settings = () => {
               icon={<MdMiscellaneousServices />}
               title="System Configuration"
             />
+          </Link>
+          <Link to="termsAndConditions" style={{ textDecoration: "none" }}>
+            <Card icon={<FaRegFileAlt />} title="Terms & Conditions" />
           </Link>
         </div>
       </div>

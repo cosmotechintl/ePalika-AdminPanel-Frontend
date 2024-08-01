@@ -12,6 +12,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utils/config";
 import { adminRequest, updateAuthToken } from "../../utils/requestMethod";
 import { GrServices } from "react-icons/gr";
+import { BsChatLeftText, BsPeople } from "react-icons/bs";
 const iconMapping = {
   IoHomeOutline,
   IoSettingsOutline,
@@ -19,6 +20,8 @@ const iconMapping = {
   GrUserAdmin,
   PiSignOut,
   GrServices,
+  BsChatLeftText,
+  BsPeople,
 };
 const Sidebar = () => {
   const navigate = useNavigate();

@@ -1,0 +1,60 @@
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+$color-white: #f1f1f1f1;
+$color-red: #ef233c;
+$border-color: rgba(128, 128, 128, 0.378);
+.financeDetailsContainer {
+  width: 90%;
+  .financeDetailsContents {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-wrap: wrap;
+    .financeDetailsHeader {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 25px;
+      color: $color-dark;
+      .backArrow {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .financeeducationDetailsBody {
+      padding: 0.5rem 1.5rem;
+      .bodyHead {
+        padding: 1rem 0rem;
+        .institutionName {
+          font-size: 20px;
+          font-weight: 500;
+          text-transform: uppercase;
+        }
+      }
+      .bodyContents {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        .item {
+          display: flex;
+          flex-direction: column;
+          flex: 1 1 calc(50% - 40px);
+          gap: 0.4rem;
+          box-sizing: border-box;
+          .itemHeader {
+            font-size: 15px;
+            color: $color-small;
+          }
+          .itemBody {
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+}

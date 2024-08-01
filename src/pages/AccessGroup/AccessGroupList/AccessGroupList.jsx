@@ -9,7 +9,7 @@ import Loader from "../../../components/Loader/Loader";
 import Swal from "sweetalert2";
 
 const AccessGroupList = () => {
-  const headers = ["Name", "Type"];
+  const headers = ["Name", "Description"];
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const AccessGroupList = () => {
         });
         const fetchedRows = response.data.data.records.map((accessGroup) => [
           accessGroup.name,
-          "Unavailable at the moment",
+          accessGroup.description,
         ]);
         setRows(fetchedRows);
       } catch (error) {

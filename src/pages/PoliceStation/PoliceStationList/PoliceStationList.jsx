@@ -14,44 +14,42 @@ const PoliceStationList = () => {
     "Contact Person",
     "Phone",
     "Ward",
-    "Code",
+    "Status",
   ];
   const [rows, setRows] = useState([]);
-
-  useEffect(() => {
+  const fetchPoliceStations = async () => {
     let isMounted = true;
-    const fetchPoliceStations = async () => {
-      try {
-        const policeStation = await adminRequest.post(
-          `${BASE_URL}/policeStation/get`,
-          {
-            firstRow: 1,
-            pageSize: 3,
-          }
-        );
-        const fetchedRows = policeStation.data.data.records.map((ps) => [
+    try {
+      const policeStation = await adminRequest.post(
+        `${BASE_URL}/policeStation/get`,
+        {
+          firstRow: 1,
+          pageSize: 3,
+        }
+      );
+      const fetchedRows = policeStation.data.data.records.map((ps) => ({
+        displayData: [
           ps.name,
           ps.address,
           ps.contactPerson,
           ps.phoneNumber,
           ps.ward.wardNumber,
-          ps.code,
-        ]);
-        if (isMounted) {
-          setRows(fetchedRows);
-        }
-      } catch (error) {
-        if (isMounted) {
-          toast.error("Failed to fetch police stations");
-        }
+          ps.status.name,
+        ],
+        code: ps.code,
+      }));
+      if (isMounted) {
+        setRows(fetchedRows);
       }
-    };
+    } catch (error) {
+      if (isMounted) {
+        console.log("Failed to fetch police stations");
+      }
+    }
+  };
+  useEffect(() => {
     fetchPoliceStations();
-    return () => {
-      isMounted = false;
-    };
   }, []);
-
   updateAuthToken();
   const handleDelete = async (code) => {
     const result = await Swal.fire({
@@ -73,24 +71,25 @@ const PoliceStationList = () => {
           }
         );
         if (response.data.code == 0) {
+          fetchPoliceStations();
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Failed to delete news item");
+        console.log(error);
       }
     }
   };
   const getMenuItems = (row) => [
-    { link: `view/${row[5]}`, text: "View" },
-    { link: `edit/${row[5]}`, text: "Edit" },
+    { link: `view/${row.code}`, text: "View" },
+    { link: `edit/${row.code}`, text: "Edit" },
     {
       link: "#",
       text: "Delete",
       onClick: (e) => {
         e.preventDefault();
-        handleDelete(row[5]);
+        handleDelete(row.code);
       },
     },
   ];
@@ -102,11 +101,13 @@ const PoliceStationList = () => {
           title="Police Station Lists"
           createButtonLabel="Create Police Station"
           headers={headers}
-          rows={rows}
+          rows={rows.map((row) => row.displayData)}
           link="create"
           showEyeViewIcon={false}
           showFilterIcon={true}
-          getMenuItems={getMenuItems}
+          getMenuItems={(row) =>
+            getMenuItems(rows.find((r) => r.displayData === row))
+          }
         />
       ) : (
         <Loader />

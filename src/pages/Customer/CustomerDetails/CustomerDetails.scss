@@ -1,0 +1,187 @@
+//colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+$color-white: #f1f1f1f1;
+.swal2-textarea {
+  font-size: 15px;
+  font-family: "poppins", sans-serif;
+}
+.customerDetailsContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  .customerDetailsContents {
+    width: 90%;
+    .customerDetailsHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      span {
+        display: inline-flex;
+        gap: 20px;
+        align-items: center;
+        font-size: 24px;
+        font-weight: 400;
+        color: $color-dark;
+        .backIcon {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      margin-bottom: 1.5rem;
+      .visibilityToggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: $color-dark;
+      }
+    }
+    .body {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      .left {
+        display: flex;
+        gap: 20px;
+        flex: 2;
+        .profileImgContainer {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 140px;
+          width: 150px;
+          background-color: $active-bg-color;
+          border-radius: 2px;
+          .profileImg {
+            height: 100px;
+            width: 100px;
+          }
+        }
+        .customerUserDetailsContainer {
+          display: flex;
+          flex-direction: column;
+          gap: 0.7rem;
+          .fullName {
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+          }
+          .username {
+            font-size: 13px;
+            font-weight: 500;
+          }
+          .status {
+            margin-top: 5px;
+            font-size: 13px;
+            font-weight: 500;
+            color: $color-white;
+            padding: 5px;
+            background-color: lighten($primary-color, 5%);
+            width: max-content;
+            border-radius: 3px;
+          }
+          .genderBG {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            .genderContainer,
+            .bloodGroupContainer {
+              display: inline-flex;
+              gap: 10px;
+            }
+            .genderIcon,
+            .bloodGroupIcon {
+              font-size: 20px;
+            }
+            .userGender,
+            .bloodGroup {
+              font-size: 13px;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+      .right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        color: $color-dark;
+        .headerRight {
+          font-size: 16px;
+          font-weight: 600;
+          color: $color-dark;
+          text-transform: uppercase;
+        }
+        .emailContainer,
+        .phoneContainer,
+        .addressContainer {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          .icon {
+            font-size: 16px;
+          }
+          .email,
+          .phone {
+            font-size: 14px;
+            font-weight: 500;
+            color: $color-dark;
+          }
+        }
+      }
+    }
+    .bottom {
+      margin-top: 2rem;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      .edit-btn {
+        border: 0;
+        outline: 0;
+        background-color: $primary-color;
+        color: lighten($color-white, 5%);
+        height: 40px;
+        font-size: 15px;
+        width: max-content;
+        padding: 10px 20px;
+        transition: 300ms all ease-in-out;
+        font-weight: 600;
+        &:hover {
+          cursor: pointer;
+          background-color: darken($primary-color, 5%);
+        }
+      }
+      .bottom-btn {
+        border: 0;
+        outline: 0;
+        color: $primary-color;
+        background-color: lighten($color-white, 5%);
+        border: 2px solid $primary-color;
+        height: 40px;
+        font-size: 15px;
+        width: max-content;
+        padding: 10px 20px;
+        transition: 300ms all ease-in-out;
+        font-weight: 600;
+        &:hover {
+          color: lighten($color-white, 5%);
+          cursor: pointer;
+          background-color: darken($primary-color, 5%);
+        }
+        &:disabled {
+          cursor: no-drop;
+          color: $primary-color;
+          background-color: lighten($color-white, 5%);
+          border: 2px solid $primary-color;
+        }
+      }
+    }
+  }
+}

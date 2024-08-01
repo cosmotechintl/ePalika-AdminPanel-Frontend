@@ -1,0 +1,303 @@
+import React, { useEffect, useState } from "react";
+import "./CustomerDetails.scss";
+import {
+  FaEnvelope,
+  FaPhoneAlt,
+  FaMapMarkerAlt,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
+import { BASE_URL } from "../../../utils/config";
+import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
+import Loader from "../../../components/Loader/Loader";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import { CiLocationArrow1 } from "react-icons/ci";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { BsPeople } from "react-icons/bs";
+import { MdOutlineBloodtype } from "react-icons/md";
+const CustomerDetails = () => {
+  const [data, setData] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const activeURL = location.pathname.split("/")[3];
+
+  const [refresh, setRefresh] = useState(false);
+
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+  const maskContent = (content) => {
+    return isVisible ? content : content.replace(/./g, "*");
+  };
+  const handleBackClick = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await adminRequest.post(
+          `${BASE_URL}/customer/detail`,
+          {
+            email: `${activeURL}`,
+          }
+        );
+        setData(response.data);
+      } catch (error) {
+        toast.error(error.message || "Failed to fetch data");
+      }
+    };
+    fetchData();
+  }, [activeURL, refresh]);
+
+  updateAuthToken();
+
+  if (!data || !data.data) {
+    return <Loader />;
+  }
+
+  //   const handleDeleteUser = async (e) => {
+  //     e.preventDefault();
+  //     Swal.fire({
+  //       title: "Are you sure you want to delete this user?",
+  //       icon: "warning",
+  //       showCancelButton: true,
+  //       confirmButtonColor: "#00425A",
+  //       cancelButtonColor: "#FC0000",
+  //       confirmButtonText: "Delete",
+  //       html: '<textarea id="deleteReason" class="swal2-textarea" placeholder="Enter reason for deletion" rows="3" style="width: 80%;"></textarea>',
+  //       preConfirm: () => {
+  //         const deleteReason =
+  //           Swal.getPopup().querySelector("#deleteReason").value;
+  //         if (!deleteReason) {
+  //           Swal.showValidationMessage("Please enter a reason for deletion");
+  //         }
+  //         return { deleteReason: deleteReason };
+  //       },
+  //     }).then(async (result) => {
+  //       if (result.isConfirmed) {
+  //         try {
+  //           const response = await adminRequest.post(
+  //             `${BASE_URL}`,
+  //             {
+  //               email: `${activeURL}`,
+  //               remarks: result.value.deleteReason,
+  //             }
+  //           );
+  //           setRefresh(!refresh);
+  //           Swal.fire({
+  //             title: "Deleted!",
+  //             text: `${response.data.message}`,
+  //             icon: "success",
+  //           });
+  //         } catch (error) {
+  //           toast.error(error.message || "Failed to delete data");
+  //         }
+  //       }
+  //     });
+  //   };
+
+  //   const handleBlockUser = async (e) => {
+  //     e.preventDefault();
+  //     Swal.fire({
+  //       title: "Are you sure you want to block this user?",
+  //       icon: "warning",
+  //       showCancelButton: true,
+  //       confirmButtonColor: "#00425A",
+  //       cancelButtonColor: "#FC0000",
+  //       confirmButtonText: "Block",
+  //       html: '<textarea id="blockReason" class="swal2-textarea" placeholder="Enter reason for blocking" rows="3" style="width: 80%;"></textarea>',
+  //       preConfirm: () => {
+  //         const blockReason = Swal.getPopup().querySelector("#blockReason").value;
+  //         if (!blockReason) {
+  //           Swal.showValidationMessage("Please enter a reason for block");
+  //         }
+  //         return { blockReason: blockReason };
+  //       },
+  //     }).then(async (result) => {
+  //       if (result.isConfirmed) {
+  //         try {
+  //           const response = await adminRequest.post(
+  //             `${BASE_URL}`,
+  //             {
+  //               email: `${activeURL}`,
+  //               remarks: result.value.blockReason,
+  //             }
+  //           );
+  //           setRefresh(!refresh);
+  //           Swal.fire({
+  //             title: "Blocked!",
+  //             text: `${response.data.message}`,
+  //             icon: "success",
+  //           });
+  //         } catch (error) {
+  //           toast.error(error.message || "Failed to block data");
+  //         }
+  //       }
+  //     });
+  //   };
+
+  //   const handleUnblockUser = async (e) => {
+  //     e.preventDefault();
+  //     Swal.fire({
+  //       title: "Are you sure you want to unblock this user?",
+  //       icon: "question",
+  //       showCancelButton: true,
+  //       confirmButtonColor: "#00425A",
+  //       cancelButtonColor: "#FC0000",
+  //       confirmButtonText: "Unblock",
+  //     }).then(async (result) => {
+  //       if (result.isConfirmed) {
+  //         try {
+  //           const response = await adminRequest.post(
+  //             `${BASE_URL}`,
+  //             {
+  //               email: `${activeURL}`,
+  //             }
+  //           );
+  //           setRefresh(!refresh);
+  //           Swal.fire({
+  //             title: "Unblocked!",
+  //             text: `${response.data.message}`,
+  //             icon: "success",
+  //           });
+  //         } catch (error) {
+  //           toast.error(error.message || "Failed to unblock user");
+  //         }
+  //       }
+  //     });
+  //   };
+
+  return (
+    <div className="customerDetailsContainer">
+      <div className="customerDetailsContents">
+        <div className="customerDetailsHeader">
+          <span>
+            <FaArrowLeftLong className="backIcon" onClick={handleBackClick} />
+            Customer Details
+          </span>
+          <span onClick={toggleVisibility} className="visibilityToggle">
+            {isVisible ? (
+              <FaEye title="Hide Sensitive Data" />
+            ) : (
+              <FaEyeSlash title="View Sensitive Data" />
+            )}
+          </span>
+        </div>
+        {data && data.data ? (
+          <>
+            <div className="body">
+              <div className="left">
+                <div className="profileImgContainer">
+                  <img
+                    src={
+                      data.data.image
+                        ? `${BASE_URL}/path/to/images/${data.data.image}`
+                        : "https://www.w3schools.com/howto/img_avatar.png"
+                    }
+                    alt="profile"
+                    className="profileImg"
+                  />
+                </div>
+                <div className="customerUserDetailsContainer">
+                  <span className="fullName">{data.data.fullName}</span>
+                  <span className="username">
+                    {maskContent(`${data.data.email}`)}
+                  </span>
+                  {/* <span className="status">{data.data.status.name}</span> */}
+                  <span className="genderBG">
+                    <span className="genderContainer">
+                      <span className="genderInfo">
+                        <BsPeople className="genderIcon" />
+                      </span>
+                      <span className="gender">
+                        <span className="userGender">
+                          {data.data.gender.gender}
+                        </span>
+                      </span>
+                    </span>
+                    <span className="bloodGroupContainer">
+                      <span className="bloodGroupInfo">
+                        <MdOutlineBloodtype className="bloodGroupIcon" />
+                      </span>
+                      <span className="bloodGroup">
+                        <span className="userBloodGroup">
+                          {data.data.bloodGroup.name}
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <div className="right">
+                <div className="headerRight">Contact</div>
+                <div className="emailContainer">
+                  <span className="icon">
+                    <FaEnvelope />
+                  </span>
+                  <span className="email">{maskContent(data.data.email)}</span>
+                </div>
+                <div className="phoneContainer">
+                  <span className="icon">
+                    <FaPhoneAlt />
+                  </span>
+                  <span className="phone">
+                    {maskContent(data.data.mobileNumber)}
+                  </span>
+                </div>
+                <div className="addressContainer">
+                  <span className="icon">
+                    <FaMapMarkerAlt />
+                  </span>
+                  <span className="phone">Ward No. 1, {data.data.address}</span>
+                </div>
+              </div>
+            </div>
+            <div className="bottom">
+              <Link to={`/adminUser/edit/${activeURL}`}>
+                <button
+                  type="button"
+                  className="edit-btn"
+                  //   disabled={data.data.status.name === "DELETED"}
+                >
+                  Block
+                </button>
+              </Link>
+              <button
+                type="button"
+                className="bottom-btn"
+                // disabled={data.data.status.name === "DELETED"}
+                // onClick={handleDeleteUser}
+              >
+                Delete
+              </button>
+              <button
+                type="button"
+                className="bottom-btn"
+                // disabled={data.data.status.name === "DELETED"}
+              >
+                Reset Password
+              </button>
+              <button
+                type="button"
+                className="bottom-btn"
+                // disabled={data.data.status.name === "DELETED"}
+              >
+                Reset Two Factor Authentication
+              </button>
+            </div>
+          </>
+        ) : (
+          <Loader />
+        )}
+      </div>
+      <ToastContainer position="top-center" />
+    </div>
+  );
+};
+
+export default CustomerDetails;

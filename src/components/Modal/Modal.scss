@@ -1,0 +1,118 @@
+// Colors
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+$color-white: #f1f1f1f1;
+$color-red: #ef233c;
+$border-color: rgba(128, 128, 128, 0.378);
+.bottomRightModal {
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  width: 30vw;
+  min-height: 75vh;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  .modalContent {
+    hr {
+      background: $active-bg-color;
+      color: $active-bg-color;
+    }
+    .modalContentHeader {
+      padding: 0.5rem 0.8rem;
+      background: $primary-color;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      .headerText {
+        font-weight: 500;
+      }
+      .headerButtons {
+        font-size: 23px;
+        margin-top: 4px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .modalContentBody {
+      padding: 1rem;
+      .replyTo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .messageBox {
+        position: relative;
+        form {
+          margin-top: 1.5rem;
+          display: flex;
+          gap: 30px;
+          flex-wrap: wrap;
+          .inputGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            textarea {
+              outline: 0;
+              min-height: 45vh;
+              width: 26vw;
+              font-size: 15px;
+              line-height: 1.5;
+              border: 0;
+              font-family: "poppins", sans-serif;
+            }
+          }
+          .btn-group {
+            display: flex;
+            gap: 1rem;
+            position: fixed;
+            bottom: 10px;
+            .create-btn {
+              border: 0;
+              outline: 0;
+              background-color: $primary-color;
+              color: lighten($color-white, 5%);
+              height: 40px;
+              font-size: 15px;
+              width: max-content;
+              padding: 10px 20px;
+              transition: 300ms all ease-in-out;
+              font-weight: 600;
+              &:hover {
+                cursor: pointer;
+                background-color: darken($primary-color, 5%);
+              }
+            }
+            .cancel-btn {
+              border: 0;
+              outline: 0;
+              color: $primary-color;
+              background-color: lighten($color-white, 5%);
+              border: 2px solid $primary-color;
+              height: 40px;
+              font-size: 15px;
+              width: max-content;
+              padding: 10px 20px;
+              transition: 300ms all ease-in-out;
+              font-weight: 600;
+              &:hover {
+                color: lighten($color-white, 5%);
+                cursor: pointer;
+                background-color: darken($primary-color, 5%);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

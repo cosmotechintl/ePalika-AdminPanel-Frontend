@@ -1,0 +1,65 @@
+$bg-color: #ffffff;
+$primary-color: #00425a;
+$color-small: rgba(128, 128, 128, 0.915);
+$color-dark: #363949;
+$color-icon: #2384b4;
+$active-bg-color: #edf2f4d5;
+$color-white: #f1f1f1f1;
+$color-red: #ef233c;
+$border-color: rgba(128, 128, 128, 0.378);
+.tourismAreaDetailsContainer {
+  .tourismAreaDetailsContents {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-wrap: wrap;
+    .tourismAreaDetailsHeader {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 25px;
+      color: $color-dark;
+      .backArrow {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .tourismAreaDetailsBody {
+      padding: 0.5rem 2rem;
+      .bodyContents {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3rem;
+        .bodyLeft {
+          flex: 1;
+          .imageContainer {
+            .tourismAreaImage {
+              height: 70vh;
+            }
+          }
+        }
+        .bodyRight {
+          display: flex;
+          flex: 1;
+          flex-direction: column;
+          gap: 0.8rem;
+          color: $color-dark;
+          .tourismAreaName {
+            font-size: 20px;
+            font-weight: 500;
+          }
+          .directionDetails,
+          .tourismAreaCategory {
+            color: $color-small;
+          }
+          .tourismAreaDescription {
+            color: $color-dark;
+            text-align: justify;
+            line-height: 1.5;
+          }
+        }
+      }
+    }
+  }
+}

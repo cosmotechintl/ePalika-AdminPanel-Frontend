@@ -3,7 +3,6 @@ import "./CustomForm.scss";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import JoditEditor from "jodit-react";
-import HTMLReactParser from "html-react-parser";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 const CustomForm = ({

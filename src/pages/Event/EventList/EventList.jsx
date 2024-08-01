@@ -10,36 +10,34 @@ import { BASE_URL } from "../../../utils/config";
 import { trimDate } from "../../../utils/dateUtil";
 import Swal from "sweetalert2";
 const EventList = () => {
-  const headers = ["Name", "Date", "Category", "Description", "Code"];
+  const headers = ["Name", "Date", "Category", "Description", "Status"];
   const [rows, setRows] = useState([]);
 
-  useEffect(() => {
-    let isMounted = true;
-    const fetchEvent = async () => {
-      try {
-        const event = await adminRequest.post(`${BASE_URL}/event/get`, {
-          firstRow: 0,
-          pageSize: 0,
-        });
-        const fetchedRows = event?.data.data.records.map((event) => [
+  const fetchEvent = async () => {
+    try {
+      const event = await adminRequest.post(`${BASE_URL}/event/get`, {
+        firstRow: 0,
+        pageSize: 0,
+      });
+      const fetchedRows = event?.data.data.records.map((event) => ({
+        displayData: [
           event.name,
           trimDate(event.eventDate),
           event.eventCategory.name,
           truncateContents(event.description, 10),
-          event.code,
-        ]);
-        if (isMounted) {
-          setRows(fetchedRows);
-        }
-      } catch (error) {
-        console.log(error);
-        toast.error("Failed to fetch events");
-      }
-    };
+          event.status.name,
+        ],
+        code: event.code,
+      }));
+      setRows(fetchedRows);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to fetch events");
+    }
+  };
+
+  useEffect(() => {
     fetchEvent();
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   updateAuthToken();
@@ -61,6 +59,7 @@ const EventList = () => {
         });
         if (response.data.code == 0) {
           toast.success("Event deleted successfully");
+          fetchEvent();
         } else {
           toast.error("Failed to delete event");
         }
@@ -71,14 +70,14 @@ const EventList = () => {
   };
 
   const getMenuItems = (row) => [
-    { link: `view/${row[4]}`, text: "View" },
-    { link: `edit/${row[4]}`, text: "Edit" },
+    { link: `view/${row.code}`, text: "View" },
+    { link: `edit/${row.code}`, text: "Edit" },
     {
       link: "#",
       text: "Delete",
       onClick: (e) => {
         e.preventDefault();
-        handleDelete(row[4]);
+        handleDelete(row.code);
       },
     },
   ];
@@ -90,11 +89,13 @@ const EventList = () => {
           title="Event Lists"
           createButtonLabel="Create Event"
           headers={headers}
-          rows={rows}
+          rows={rows.map((row) => row.displayData)}
           link="create"
           showEyeViewIcon={false}
           showFilterIcon={true}
-          getMenuItems={getMenuItems}
+          getMenuItems={(row) =>
+            getMenuItems(rows.find((r) => r.displayData === row))
+          }
         />
       ) : (
         <Loader />

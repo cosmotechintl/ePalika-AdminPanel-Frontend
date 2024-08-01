@@ -15,40 +15,39 @@ const TourismAreaList = () => {
     "Latitude",
     "Longitude",
     "Description",
-    "Code",
+    "Status",
   ];
   const [rows, setRows] = useState([]);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchTourismAreas = async () => {
-      try {
-        const tourismAreas = await adminRequest.post(
-          `${BASE_URL}/tourismArea/get`,
-          {
-            firstRow: 1,
-            pageSize: 3,
-          }
-        );
-        const fetchedRows = tourismAreas.data.data.records.map((t) => [
+  const fetchTourismAreas = async () => {
+    try {
+      const tourismAreas = await adminRequest.post(
+        `${BASE_URL}/tourismArea/get`,
+        {
+          firstRow: 1,
+          pageSize: 3,
+        }
+      );
+      const fetchedRows = tourismAreas.data.data.records.map((t) => ({
+        displayData: [
           t.name,
           t.tourismCategory.name,
           t.latitude,
           t.longitude,
-          t.details,
-          t.code,
-        ]);
-        if (isMounted) {
-          setRows(fetchedRows);
-        }
-      } catch (error) {
-        if (isMounted) {
-          toast.error("Failed to fetch tourism areas");
-        }
-      }
-    };
-    fetchTourismAreas();
+          truncateContents(t.details, 10),
+          t.status.name,
+        ],
+        code: t.code,
+      }));
+      setRows(fetchedRows);
+    } catch (error) {
+      toast.error("Failed to fetch tourism areas");
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) fetchTourismAreas();
     return () => {
       isMounted = false;
     };
@@ -75,24 +74,25 @@ const TourismAreaList = () => {
           }
         );
         if (response.data.code == 0) {
+          fetchTourismAreas();
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Failed to delete tourism area");
+        console.log(error);
       }
     }
   };
   const getMenuItems = (row) => [
-    { link: `view/${row[5]}`, text: "View" },
-    { link: `edit/${row[5]}`, text: "Edit" },
+    { link: `view/${row.code}`, text: "View" },
+    { link: `edit/${row.code}`, text: "Edit" },
     {
       link: "#",
       text: "Delete",
       onClick: (e) => {
         e.preventDefault();
-        handleDelete(row[5]);
+        handleDelete(row.code);
       },
     },
   ];
@@ -104,11 +104,13 @@ const TourismAreaList = () => {
           title="Tourism Area Lists"
           createButtonLabel="Create Tourism Area"
           headers={headers}
-          rows={rows}
+          rows={rows.map((row) => row.displayData)}
           link="create"
           showEyeViewIcon={false}
           showFilterIcon={true}
-          getMenuItems={getMenuItems}
+          getMenuItems={(row) =>
+            getMenuItems(rows.find((r) => r.displayData === row))
+          }
         />
       ) : (
         <Loader />
