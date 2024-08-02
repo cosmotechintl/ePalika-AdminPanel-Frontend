@@ -11,12 +11,16 @@ const CustomForm = ({
   flexDirection = "column",
   createButtonLabel = "Create",
   onSubmit,
+  showDefaultHeader = true,
   isSubmitting = false,
+  showCancelButton = true,
+  showCloseButton = false,
+  closeFilterForm,
 }) => {
   const editor = useRef(null);
 
   const config = {
-    width: "1000px", // Ensure the editor uses the full width of its container
+    width: "1000px",
     height: "70vh",
     minHeight: 100,
   };
@@ -40,12 +44,14 @@ const CustomForm = ({
   return (
     <div className="createPageContainer">
       <div className="createPageContents">
-        <div className="top">
-          <span className="backIcon" onClick={handleBackClick}>
-            <FaArrowLeftLong />
-          </span>
-          <span className="headerTitle">{header}</span>
-        </div>
+        {showDefaultHeader && (
+          <div className="top">
+            <span className="backIcon" onClick={handleBackClick}>
+              <FaArrowLeftLong />
+            </span>
+            <span className="headerTitle">{header}</span>
+          </div>
+        )}
         <div className="bottom">
           <form
             style={{ flexDirection: flexDirection }}
@@ -139,14 +145,26 @@ const CustomForm = ({
               >
                 {createButtonLabel}
               </button>
-              <button
-                type="button"
-                className="cancel-btn"
-                disabled={isSubmitting}
-                onClick={handleBackClick}
-              >
-                Cancel
-              </button>
+              {showCancelButton && (
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  disabled={isSubmitting}
+                  onClick={handleBackClick}
+                >
+                  Cancel
+                </button>
+              )}
+              {showCloseButton && (
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  disabled={isSubmitting}
+                  onClick={closeFilterForm}
+                >
+                  Reset
+                </button>
+              )}
             </div>
           </form>
         </div>

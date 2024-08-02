@@ -1,0 +1,22 @@
+.dashboardContainer {
+  .dashboardCardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    flex-direction: row;
+    align-items: center;
+    .populationCardItem {
+      width: 180px;
+      height: 150px;
+      border: 1px solid black;
+      padding: 1rem;
+      background-color: #0c4f68;
+      color: #fff;
+      .populationCardItemContents {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+      }
+    }
+  }
+}

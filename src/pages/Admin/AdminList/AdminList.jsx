@@ -4,11 +4,20 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
-import Loader from "../../../components/Loader/Loader";
 import Swal from "sweetalert2";
+
 const AdminList = () => {
   const headers = ["Name", "Email", "Mobile", "Access Group", "Status"];
   const [rows, setRows] = useState([]);
+  const [filterValues, setFilterValues] = useState({
+    name: "",
+    email: "",
+    mobileNumber: "",
+    accessGroup: "",
+    status: "",
+  });
+  const [accessGroups, setAccessGroups] = useState([]);
+
   const fetchAdmin = async () => {
     try {
       const admin = await adminRequest.post(`${BASE_URL}/admin`, {
@@ -28,10 +37,48 @@ const AdminList = () => {
     }
   };
 
+  const fetchFilteredAdmin = async () => {
+    try {
+      const admin = await adminRequest.post(`${BASE_URL}/admin`, {
+        firstRow: 1,
+        pageSize: 3,
+        param: {
+          name: filterValues.name,
+          mobileNumber: filterValues.mobileNumber,
+          email: filterValues.email,
+        },
+      });
+      const fetchedRows = admin.data.data.records.map((a) => [
+        a.name,
+        a.email,
+        a.mobileNumber,
+        a.accessGroup.name,
+        a.status.name,
+      ]);
+      setRows(fetchedRows);
+    } catch (error) {
+      toast.error("Failed to fetch filtered admin list");
+    }
+  };
+
+  const fetchAccessGroups = async () => {
+    try {
+      const response = await adminRequest.post(`${BASE_URL}/accessGroup`, {
+        firstRow: 0,
+        pageSize: 0,
+      });
+      setAccessGroups(response.data.data.records);
+      updateAuthToken();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
       fetchAdmin();
+      fetchAccessGroups();
     }
     return () => {
       isMounted = false;
@@ -57,12 +104,12 @@ const AdminList = () => {
         });
         if (response.data.code == 0) {
           toast.success("Admin deleted successfully");
-          fetchAdmin(); // Refetch the admin list
+          fetchAdmin();
         } else {
           toast.error("Failed to delete admin");
         }
       } catch (error) {
-        toast.error("Failed to delete admin");
+        console.log(error);
       }
     }
   };
@@ -83,22 +130,87 @@ const AdminList = () => {
     ,
   ];
 
+  const handleFilterSubmit = (e) => {
+    e.preventDefault();
+    fetchFilteredAdmin();
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilterValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  const filterFields = [
+    {
+      name: "name",
+      label: "Name",
+      type: "text",
+      value: filterValues.name,
+      onChange: handleFilterChange,
+    },
+    {
+      name: "email",
+      label: "Email",
+      type: "email",
+      value: filterValues.email,
+      onChange: handleFilterChange,
+    },
+    {
+      name: "mobileNumber",
+      label: "Mobile Number",
+      type: "text",
+      value: filterValues.mobileNumber,
+      onChange: handleFilterChange,
+    },
+    {
+      name: "accessGroup",
+      label: "Access Group",
+      type: "select",
+      value: filterValues.accessGroup,
+      onChange: handleFilterChange,
+      options: [
+        { label: "Select Access Group", value: "" },
+        ...accessGroups.map((group) => ({
+          label: group.name,
+          value: group.name,
+        })),
+      ],
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "text",
+      value: filterValues.status,
+      onChange: handleFilterChange,
+    },
+  ];
+  const resetFilterForm = (e) => {
+    e.preventDefault();
+    fetchAdmin();
+    setFilterValues({
+      name: "",
+      email: "",
+      mobileNumber: "",
+    });
+  };
   return (
     <div className="adminListContainer">
-      {rows.length > 0 ? (
-        <List
-          title="Admin List"
-          createButtonLabel="Create Admin"
-          headers={headers}
-          rows={rows}
-          link="create"
-          showEyeViewIcon={false}
-          showFilterIcon={true}
-          getMenuItems={getMenuItems}
-        />
-      ) : (
-        <Loader />
-      )}
+      <List
+        title="Admin List"
+        createButtonLabel="Create Admin"
+        headers={headers}
+        rows={rows}
+        link="create"
+        showEyeViewIcon={false}
+        showFilterIcon={true}
+        getMenuItems={getMenuItems}
+        filterFields={filterFields}
+        onFilterSubmit={handleFilterSubmit}
+        resetFilterForm={resetFilterForm}
+      />
       <ToastContainer position="top-center" />
     </div>
   );

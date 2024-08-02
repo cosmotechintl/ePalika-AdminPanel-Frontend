@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./HomePage.scss";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
@@ -69,6 +69,7 @@ import CustomerList from "../Customer/CustomerList/CustomerList";
 import CustomerDetails from "../Customer/CustomerDetails/CustomerDetails";
 import ViewTermsAndCondition from "../TermsAndCondition/ViewTermsAndCondition/ViewTermsAndCondition";
 import EditTermsAndCondition from "../TermsAndCondition/EditTermsAndCondition/EditTermsAndCondition";
+import Dashboard from "../Dashboard/Dashboard";
 
 const Homepage = () => {
   useAuth();
@@ -88,6 +89,7 @@ const Homepage = () => {
           </div>
           <div className="homepageContents__right">
             <Routes>
+              {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="/profile" element={<UserProfile />} />
               <Route path="/services" element={<Services />} />
               <Route

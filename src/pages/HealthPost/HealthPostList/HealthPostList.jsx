@@ -5,7 +5,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { adminRequest, updateAuthToken } from "../../../utils/requestMethod";
 import { BASE_URL } from "../../../utils/config";
-import Loader from "../../../components/Loader/Loader";
 import Swal from "sweetalert2";
 
 const HealthPostList = () => {
@@ -19,7 +18,11 @@ const HealthPostList = () => {
     "Status",
   ];
   const [rows, setRows] = useState([]);
-
+  const [filterValues, setFilterValues] = useState({
+    name: "",
+    category: "",
+    status: "",
+  });
   const fetchHealthServices = async () => {
     try {
       const healthService = await adminRequest.post(
@@ -46,7 +49,35 @@ const HealthPostList = () => {
       console.log(error);
     }
   };
-
+  const fetchFilteredHealthServices = async () => {
+    try {
+      const healthService = await adminRequest.post(
+        `${BASE_URL}/healthService/get`,
+        {
+          firstRow: 1,
+          pageSize: 3,
+          param: {
+            name: filterValues.name,
+          },
+        }
+      );
+      const fetchedRows = healthService.data.data.records.map((hs) => ({
+        displayData: [
+          hs.name,
+          hs.address,
+          hs.phone,
+          hs.bedCount,
+          hs.healthCategory.name,
+          hs.ward.wardNumber,
+          hs.status.name,
+        ],
+        code: hs.code,
+      }));
+      setRows(fetchedRows);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     let isMounted = true;
     if (isMounted) fetchHealthServices();
@@ -100,25 +131,53 @@ const HealthPostList = () => {
       },
     },
   ];
+  const handleFilterSubmit = (e) => {
+    e.preventDefault();
+    fetchFilteredHealthServices();
+  };
 
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilterValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  const filterFields = [
+    {
+      name: "name",
+      label: "Name",
+      type: "text",
+      value: filterValues.name,
+      onChange: handleFilterChange,
+    },
+  ];
+  const resetFilterForm = (e) => {
+    e.preventDefault();
+    fetchHealthServices();
+    setFilterValues({
+      name: "",
+    });
+  };
   return (
     <div className="healthPostListContainer">
-      {rows.length > 0 ? (
-        <List
-          title="Health Services Lists"
-          createButtonLabel="Create Health Post"
-          headers={headers}
-          rows={rows.map((row) => row.displayData)}
-          link="create"
-          showEyeViewIcon={false}
-          showFilterIcon={true}
-          getMenuItems={(row) =>
-            getMenuItems(rows.find((r) => r.displayData === row))
-          }
-        />
-      ) : (
-        <Loader />
-      )}
+      <List
+        title="Health Services Lists"
+        createButtonLabel="Create Health Post"
+        headers={headers}
+        rows={rows.map((row) => row.displayData)}
+        link="create"
+        showEyeViewIcon={false}
+        showFilterIcon={true}
+        filterFields={filterFields}
+        onFilterSubmit={handleFilterSubmit}
+        getMenuItems={(row) =>
+          getMenuItems(rows.find((r) => r.displayData === row))
+        }
+        resetFilterForm={resetFilterForm}
+      />
+
       <ToastContainer position="top-center" />
     </div>
   );

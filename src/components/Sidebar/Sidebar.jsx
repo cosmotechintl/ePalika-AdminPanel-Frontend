@@ -25,7 +25,6 @@ const iconMapping = {
 };
 const Sidebar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [navigation, setNavigation] = useState([]);
   const handleSignout = () => {
     performLogout(() => {
@@ -91,7 +90,7 @@ const Sidebar = () => {
           />
         </div>
       </div>
-      <ToastContainer />
+      <ToastContainer position="top-center" />
     </div>
   );
 };

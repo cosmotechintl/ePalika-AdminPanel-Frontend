@@ -5,6 +5,7 @@ import { IoIosAddCircle, IoIosMore } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import OptionsMenu from "../../components/OptionsMenu/OptionsMenu";
+import CustomForm from "../CustomForm/CustomForm";
 
 const List = ({
   title = "Default Title",
@@ -16,8 +17,12 @@ const List = ({
   showEyeViewIcon = true,
   showFilterIcon = true,
   getMenuItems,
+  filterFields = [],
+  onFilterSubmit,
+  resetFilterForm,
 }) => {
   const navigate = useNavigate();
+  const [showFilterForm, setShowFilterForm] = useState(false);
   const [visibleMenu, setVisibleMenu] = useState(null);
   const menuRefs = useRef([]);
 
@@ -28,7 +33,10 @@ const List = ({
   const handleBackClick = () => {
     navigate(-1);
   };
-
+  const closeFilterForm = (e) => {
+    e.preventDefault();
+    setShowFilterForm(false);
+  };
   const handleMoreClick = (rowIndex) => {
     setVisibleMenu(visibleMenu === rowIndex ? null : rowIndex);
   };
@@ -61,7 +69,11 @@ const List = ({
               </span>
             )}
             {showFilterIcon && (
-              <span className="filterIcon">
+              <span
+                className="filterIcon"
+                title="Filter"
+                onClick={() => setShowFilterForm(!showFilterForm)}
+              >
                 <FaFilter />
               </span>
             )}
@@ -75,6 +87,20 @@ const List = ({
             )}
           </span>
         </div>
+        {showFilterForm && (
+          <div className="filterForm">
+            <CustomForm
+              createButtonLabel="Search"
+              flexDirection="row"
+              showDefaultHeader={false}
+              fields={filterFields}
+              onSubmit={onFilterSubmit}
+              showCancelButton={false}
+              showCloseButton={true}
+              closeFilterForm={resetFilterForm}
+            />
+          </div>
+        )}
         <div className="bottom">
           <table className="listTable">
             <thead>
@@ -86,25 +112,33 @@ const List = ({
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  <td
-                    style={{ position: "relative" }}
-                    ref={(el) => (menuRefs.current[rowIndex] = el)}
-                  >
-                    <IoIosMore onClick={() => handleMoreClick(rowIndex)} />
-                    {visibleMenu === rowIndex && (
-                      <OptionsMenu
-                        menuItems={getMenuItems(row)}
-                        visible={true}
-                      />
-                    )}
+              {rows && rows.length > 0 ? (
+                rows.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    <td
+                      style={{ position: "relative" }}
+                      ref={(el) => (menuRefs.current[rowIndex] = el)}
+                    >
+                      <IoIosMore onClick={() => handleMoreClick(rowIndex)} />
+                      {visibleMenu === rowIndex && (
+                        <OptionsMenu
+                          menuItems={getMenuItems(row)}
+                          visible={true}
+                        />
+                      )}
+                    </td>
+                    {row.map((cell, cellIndex) => (
+                      <td key={cellIndex}>{cell}</td>
+                    ))}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={headers.length + 1} style={{ fontSize: "14px" }}>
+                    No results found.
                   </td>
-                  {row.map((cell, cellIndex) => (
-                    <td key={cellIndex}>{cell}</td>
-                  ))}
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

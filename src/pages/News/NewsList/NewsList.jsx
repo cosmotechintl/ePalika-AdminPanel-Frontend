@@ -90,7 +90,7 @@ const NewsList = () => {
           rows={rows.map((row) => row.displayData)}
           link="create"
           showEyeViewIcon={false}
-          showFilterIcon={true}
+          showFilterIcon={false}
           getMenuItems={(row) =>
             getMenuItems(rows.find((r) => r.displayData === row))
           }
